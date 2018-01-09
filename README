@@ -1,0 +1,2 @@
+This project is managed by tcl scripts. For the first time, use the following command to initialize the vivado project.
+    vivado -mode batch -source setup_prj.tcl
