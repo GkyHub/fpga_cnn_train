@@ -32,8 +32,6 @@ module test_top;
     
     wire    working;
     
-    reg     clk, rst;
-    
     always #5 clk <= ~clk;
     
     initial begin
