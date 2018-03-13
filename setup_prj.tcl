@@ -11,5 +11,10 @@ set_property board_part $BOARD [current_project]
 # add source files
 add_files -fileset sources_1 ./src
 update_compile_order -fileset sources_1
+
+# add simulation files
 add_files -fileset sim_1 ./sim
 update_compile_order -fileset sim_1
+
+# add ip
+source ./ip/add_ip.tcl
