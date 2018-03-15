@@ -1,28 +1,10 @@
-set IP_NAME dram_inst_fifo
+set IP_NAME fp32_add
 set LOCAL_IP_DIR $IP_DIR/$IP_NAME
 
 # the following 2 commands should be replaced by vivado when a new ip is used for the first time
 # change the module_name in the first command and the component_name in the second command to $IP_NAME
-create_ip -name fifo_generator -vendor xilinx.com -library ip -version 13.2 -module_name $IP_NAME
-
-set_property -dict [list \
-    CONFIG.Component_Name {$IP_NAME} \
-    CONFIG.Fifo_Implementation {Common_Clock_Distributed_RAM} \
-    CONFIG.Performance_Options {First_Word_Fall_Through} \
-    CONFIG.Input_Data_Width {40} \
-    CONFIG.Input_Depth {16} \
-    CONFIG.Output_Data_Width {40} \
-    CONFIG.Output_Depth {16} \
-    CONFIG.Use_Embedded_Registers {false} \
-    CONFIG.Almost_Full_Flag {true} \
-    CONFIG.Use_Extra_Logic {true} \
-    CONFIG.Data_Count_Width {5} \
-    CONFIG.Write_Data_Count_Width {5} \
-    CONFIG.Read_Data_Count_Width {5} \
-    CONFIG.Full_Threshold_Assert_Value {15} \
-    CONFIG.Full_Threshold_Negate_Value {14} \
-    CONFIG.Empty_Threshold_Assert_Value {4} \
-    CONFIG.Empty_Threshold_Negate_Value {5}] [get_ips $IP_NAME]
+create_ip -name floating_point -vendor xilinx.com -library ip -version 7.1 -module_name $IP_NAME
+set_property -dict [list CONFIG.Component_Name {$IP_NAME}] [get_ips $IP_NAME]
 
 # do not change the following commands
 generate_target {instantiation_template} [get_files $LOCAL_IP_DIR/$IP_NAME.xci]

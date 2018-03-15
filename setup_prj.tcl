@@ -17,4 +17,4 @@ add_files -fileset sim_1 ./sim
 update_compile_order -fileset sim_1
 
 # add ip
-source ./ip/add_ip.tcl
+source ./add_ip.tcl
