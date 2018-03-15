@@ -1,2 +1,7 @@
-This project is managed by tcl scripts. For the first time, use the following command to initialize the vivado project.
-    vivado -mode batch -source setup_prj.tcl
+This project is managed by tcl scripts. For the first time, run build.sh to initialize the vivado project.
+Run clear.sh to clear everything related to vivado project, this keeps all the source files.
+
+All the design source files are included in the following three folders:
+1. src: design source
+2. sim: simulation files
+3. ip: tcl files for generating IPs.
