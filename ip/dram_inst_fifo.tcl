@@ -32,7 +32,7 @@ catch { config_ip_cache -export [get_ips -all $IP_NAME] }
 export_ip_user_files -of_objects [get_files $LOCAL_IP_DIR/$IP_NAME.xci] -no_script -sync -force -quiet
 create_ip_run [get_files -of_objects [get_fileset sources_1] $LOCAL_IP_DIR/$IP_NAME.xci]
 
-set SYNTH_NAME [append $IP_NAME "_synth_1"]
+set SYNTH_NAME [format "%s_synth_1" $IP_NAME]
 launch_runs -jobs 4 $SYNTH_NAME
 
 export_simulation -of_objects [get_files $LOCAL_IP_DIR/$IP_NAME.xci] \
