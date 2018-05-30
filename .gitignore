@@ -2,3 +2,4 @@
 *.log
 vivado_prj/*
 .Xil/*
+*.str
