@@ -70,23 +70,38 @@ module ddr2pe#(
     output                  bbuf_wr_tail_en
     );
     
-    wire                    ibuf_start;
-    wire                    ibuf_done;
+    wire                    ibuf_conf_valid;
+    wire                    ibuf_conf_ready;
     wire    [4      -1 : 0] ibuf_conf_mode;
     wire    [8      -1 : 0] ibuf_conf_idx_num;
     wire    [PE_NUM -1 : 0] ibuf_conf_mask;
+
+    wire                    ibuf_start;
+    wire                    ibuf_ready;
+    wire    [4      -1 : 0] ibuf_mode;
+    wire    [8      -1 : 0] ibuf_idx_num;
+    wire    [PE_NUM -1 : 0] ibuf_mask;
     
-    wire                    dbuf_start;
-    wire                    dbuf_done;
+    wire                    dbuf_conf_valid;
+    wire                    dbuf_conf_ready;
     wire    [4      -1 : 0] dbuf_conf_mode;
     wire    [4      -1 : 0] dbuf_conf_ch_num;
     wire    [4      -1 : 0] dbuf_conf_row_num;
     wire    [4      -1 : 0] dbuf_conf_pix_num;
     wire    [PE_NUM -1 : 0] dbuf_conf_mask;
     wire                    dbuf_conf_depool;
+
+    wire                    dbuf_start;
+    wire                    dbuf_ready;
+    wire    [4      -1 : 0] dbuf_mode;
+    wire    [4      -1 : 0] dbuf_ch_num;
+    wire    [4      -1 : 0] dbuf_row_num;
+    wire    [4      -1 : 0] dbuf_pix_num;
+    wire    [PE_NUM -1 : 0] dbuf_mask;
+    wire                    dbuf_depool;
     
-    wire                    pbuf_start;
-    wire                    pbuf_done;
+    wire                    pbuf_conf_valid;
+    wire                    pbuf_conf_ready;
     wire    [16     -1 : 0] pbuf_conf_trans_num;
     wire    [4      -1 : 0] pbuf_conf_mode;     
     wire    [4      -1 : 0] pbuf_conf_ch_num;   
@@ -95,11 +110,27 @@ module ddr2pe#(
     wire                    pbuf_conf_depool;
     wire    [PE_NUM -1 : 0] pbuf_conf_mask;
 
-    wire                    abuf_start;
-    wire                    abuf_done;
+    wire                    pbuf_start;
+    wire                    pbuf_ready;
+    wire    [16     -1 : 0] pbuf_trans_num;
+    wire    [4      -1 : 0] pbuf_mode;     
+    wire    [4      -1 : 0] pbuf_ch_num;   
+    wire    [4      -1 : 0] pbuf_pix_num;  
+    wire    [2      -1 : 0] pbuf_row_num;  
+    wire                    pbuf_depool;
+    wire    [PE_NUM -1 : 0] pbuf_mask;
+
+    wire                    abuf_conf_valid;
+    wire                    abuf_conf_ready;
     wire    [2      -1 : 0] abuf_conf_trans_type;
     wire    [16     -1 : 0] abuf_conf_trans_num;
     wire    [PE_NUM -1 : 0] abuf_conf_mask;
+
+    wire                    abuf_start;
+    wire                    abuf_ready;
+    wire    [2      -1 : 0] abuf_trans_type;
+    wire    [16     -1 : 0] abuf_trans_num;
+    wire    [PE_NUM -1 : 0] abuf_mask;
     
     wire            dbuf_ddr1_ready;
     wire            dbuf_ddr2_ready;
@@ -147,14 +178,14 @@ module ddr2pe#(
         .ins_ready  (ins_ready  ),
         .ins        (ins        ),
     
-        .ibuf_start         (ibuf_start         ),
-        .ibuf_done          (ibuf_done          ),
+        .ibuf_start         (ibuf_conf_valid    ),
+        .ibuf_done          (ibuf_conf_ready    ),
         .ibuf_conf_mode     (ibuf_conf_mode     ),
         .ibuf_conf_idx_num  (ibuf_conf_idx_num  ),
         .ibuf_conf_mask     (ibuf_conf_mask     ),
     
-        .dbuf_start         (dbuf_start         ),
-        .dbuf_done          (dbuf_done          ),
+        .dbuf_start         (dbuf_conf_valid    ),
+        .dbuf_done          (dbuf_conf_ready    ),
         .dbuf_conf_mode     (dbuf_conf_mode     ),
         .dbuf_conf_ch_num   (dbuf_conf_ch_num   ),
         .dbuf_conf_row_num  (dbuf_conf_row_num  ),
@@ -162,8 +193,8 @@ module ddr2pe#(
         .dbuf_conf_mask     (dbuf_conf_mask     ),
         .dbuf_conf_depool   (dbuf_conf_depool   ),
     
-        .pbuf_start         (pbuf_start         ),
-        .pbuf_done          (pbuf_done          ),
+        .pbuf_start         (pbuf_conf_valid    ),
+        .pbuf_done          (pbuf_conf_ready    ),
         .pbuf_conf_trans_num(pbuf_conf_trans_num),
         .pbuf_conf_mode     (pbuf_conf_mode     ),     
         .pbuf_conf_ch_num   (pbuf_conf_ch_num   ),   
@@ -172,8 +203,8 @@ module ddr2pe#(
         .pbuf_conf_depool   (pbuf_conf_depool   ),
         .pbuf_conf_mask     (pbuf_conf_mask     ),
 
-        .abuf_start             (abuf_start             ),
-        .abuf_done              (abuf_done              ),
+        .abuf_start             (abuf_conf_valid        ),
+        .abuf_done              (abuf_conf_ready        ),
         .abuf_conf_trans_type   (abuf_conf_trans_type   ),
         .abuf_conf_trans_num    (abuf_conf_trans_num    ),
         .abuf_conf_mask         (abuf_conf_mask         ),
@@ -198,7 +229,29 @@ module ddr2pe#(
         .dbuf_ddr_sel   (dbuf_ddr_sel   ),
         .ibuf_ddr_sel   (ibuf_ddr_sel   ),
         .pbuf_ddr_sel   (pbuf_ddr_sel   ),
-        .abuf_ddr_sel   (abuf_ddr_sel   )        
+        .abuf_ddr_sel   (abuf_ddr_sel   )
+    );
+
+    short_fifo#(
+        .DATA_W (4 + 8 + PE_NUM ),
+        .DEPTH  (32             )
+    ) config_ibuf_fifo (
+        .clk        (clk                ),
+        .rst        (rst                ),
+        .wr_valid   (ibuf_conf_valid    ),
+        .wr_ready   (ibuf_conf_ready    ),
+        .wr_data    ({
+            ibuf_conf_mode,
+            ibuf_conf_idx_num,
+            ibuf_conf_mask
+        }),
+        .rd_valid   (ibuf_start         ),
+        .rd_ready   (ibuf_ready         ),
+        .rd_data    ({
+            ibuf_mode,
+            ibuf_idx_num,
+            ibuf_mask
+        })
     );
     
     ddr2ibuf#(
@@ -208,7 +261,7 @@ module ddr2pe#(
         .rst            (rst                ),
     
         .start          (ibuf_start         ),
-        .done           (ibuf_done          ),
+        .done           (ibuf_ready         ),
         .conf_mode      (ibuf_conf_mode     ),
         .conf_idx_num   (ibuf_conf_idx_num  ),
         .conf_mask      (ibuf_conf_mask     ),
@@ -222,6 +275,34 @@ module ddr2pe#(
         .idx_wr_en      (idx_wr_en          )
     );
     
+    short_fifo#(
+        .DATA_W (16 + PE_NUM + 1),
+        .DEPTH  (32             )
+    ) config_dbuf_fifo (
+        .clk        (clk                ),
+        .rst        (rst                ),
+        .wr_valid   (dbuf_conf_valid    ),
+        .wr_ready   (dbuf_conf_ready    ),
+        .wr_data    ({
+            dbuf_conf_mode,   
+            dbuf_conf_ch_num, 
+            dbuf_conf_row_num,
+            dbuf_conf_pix_num,
+            dbuf_conf_mask,   
+            dbuf_conf_depool 
+        }),
+        .rd_valid   (dbuf_start         ),
+        .rd_ready   (dbuf_ready         ),
+        .rd_data    ({
+            dbuf_mode,   
+            dbuf_ch_num, 
+            dbuf_row_num,
+            dbuf_pix_num,
+            dbuf_mask,   
+            dbuf_depool 
+        })
+    );
+
     ddr2dbuf#(
         .BUF_DEPTH  (BUF_DEPTH  )
     ) ddr2dbuf_inst (
@@ -229,13 +310,13 @@ module ddr2pe#(
         .rst            (rst                ),
 
         .start          (dbuf_start         ),
-        .done           (dbuf_done          ),
-        .conf_mode      (dbuf_conf_mode     ),
-        .conf_ch_num    (dbuf_conf_ch_num   ),
-        .conf_row_num   (dbuf_conf_row_num  ),
-        .conf_pix_num   (dbuf_conf_pix_num  ),
-        .conf_mask      (dbuf_conf_mask     ),
-        .conf_depool    (dbuf_conf_depool   ),
+        .done           (dbuf_ready         ),
+        .conf_mode      (dbuf_mode          ),
+        .conf_ch_num    (dbuf_ch_num        ),
+        .conf_row_num   (dbuf_row_num       ),
+        .conf_pix_num   (dbuf_pix_num       ),
+        .conf_mask      (dbuf_mask          ),
+        .conf_depool    (dbuf_depool        ),
     
         .ddr1_data      (ddr1_data          ),
         .ddr1_valid     (ddr1_valid && dbuf_ddr_sel[0]),
@@ -249,6 +330,36 @@ module ddr2pe#(
         .dbuf_wr_data   (dbuf_wr_data       ),
         .dbuf_wr_en     (dbuf_wr_en         )
     );
+
+    short_fifo#(
+        .DATA_W (30 + PE_NUM + 1),
+        .DEPTH  (32             )
+    ) config_pbuf_fifo (
+        .clk        (clk                ),
+        .rst        (rst                ),
+        .wr_valid   (pbuf_conf_valid    ),
+        .wr_ready   (pbuf_conf_ready    ),
+        .wr_data    ({
+            pbuf_conf_trans_num,
+            pbuf_conf_mode,    
+            pbuf_conf_ch_num,   
+            pbuf_conf_pix_num,  
+            pbuf_conf_row_num,  
+            pbuf_conf_depool,   
+            pbuf_conf_mask     
+        }),
+        .rd_valid   (pbuf_start         ),
+        .rd_ready   (pbuf_ready         ),
+        .rd_data    ({
+            pbuf_trans_num,
+            pbuf_mode,    
+            pbuf_ch_num,   
+            pbuf_pix_num,  
+            pbuf_row_num,  
+            pbuf_depool,   
+            pbuf_mask     
+        })
+    );
     
     ddr2pbuf#(
         .BUF_DEPTH  (BUF_DEPTH  )
@@ -257,14 +368,14 @@ module ddr2pe#(
         .rst            (rst                ),
     
         .start          (pbuf_start         ),
-        .done           (pbuf_done          ),
-        .conf_trans_num (pbuf_conf_trans_num),
-        .conf_mode      (pbuf_conf_mode     ),
-        .conf_ch_num    (pbuf_conf_ch_num   ),
-        .conf_pix_num   (pbuf_conf_pix_num  ),
-        .conf_row_num   (pbuf_conf_row_num  ),
-        .conf_depool    (pbuf_conf_depool   ),
-        .conf_mask      (pbuf_conf_mask     ),
+        .done           (pbuf_ready         ),
+        .conf_trans_num (pbuf_trans_num     ),
+        .conf_mode      (pbuf_mode          ),
+        .conf_ch_num    (pbuf_ch_num        ),
+        .conf_pix_num   (pbuf_pix_num       ),
+        .conf_row_num   (pbuf_row_num       ),
+        .conf_depool    (pbuf_depool        ),
+        .conf_mask      (pbuf_mask          ),
     
         .ddr1_data      (ddr1_data          ),
         .ddr1_valid     (ddr1_valid && pbuf_ddr_sel[0]),
@@ -284,6 +395,28 @@ module ddr2pe#(
         .bbuf_acc_data  (bbuf_acc_data      )
     );
     
+    short_fifo#(
+        .DATA_W (30 + PE_NUM + 1),
+        .DEPTH  (32             )
+    ) config_abuf_fifo (
+        .clk        (clk                ),
+        .rst        (rst                ),
+        .wr_valid   (abuf_conf_valid    ),
+        .wr_ready   (abuf_conf_ready    ),
+        .wr_data    ({
+            abuf_conf_trans_type,
+            abuf_conf_trans_num, 
+            abuf_conf_mask     
+        }),
+        .rd_valid   (abuf_start         ),
+        .rd_ready   (abuf_ready         ),
+        .rd_data    ({
+            abuf_trans_type,
+            abuf_trans_num, 
+            abuf_mask         
+        })
+    );
+
     ddr2abuf#(
         .BUF_DEPTH  (BUF_DEPTH  ),
         .PE_NUM     (PE_NUM     )
@@ -292,10 +425,10 @@ module ddr2pe#(
         .rst            (rst                    ),
     
         .start          (abuf_start             ),
-        .done           (abuf_done              ),
-        .conf_trans_type(abuf_conf_trans_type   ),
-        .conf_trans_num (abuf_conf_trans_num    ),
-        .conf_mask      (abuf_conf_mask         ),
+        .done           (abuf_ready             ),
+        .conf_trans_type(abuf_trans_type        ),
+        .conf_trans_num (abuf_trans_num         ),
+        .conf_mask      (abuf_mask              ),
     
         // ddr data stream port
         .ddr_data       (ddr2_data              ),
