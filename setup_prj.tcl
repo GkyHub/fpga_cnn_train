@@ -18,3 +18,4 @@ update_compile_order -fileset sim_1
 
 # add ip
 # source ./add_ip.tcl
+source ./create_ip_repo.tcl
