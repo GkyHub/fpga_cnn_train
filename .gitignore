@@ -1,5 +1,25 @@
+# ignore vivado log files
 *.jou
 *.log
-vivado_prj/*
-.Xil/*
 *.str
+
+# ignore the vivado project
+/vivado_prj/*
+.Xil/*
+
+# ignore the ip project but keep the necessary files to generate ip
+# this type list is to be completed for new IPs
+ip/managed_ip_project
+ip/ip_user_files
+
+#ip/*/*
+#!ip/*/*.xci
+#!ip/*/*.xml
+#!ip/*/*.veo
+#!ip/*/*.vho
+
+#ip/*/*/*
+#!ip/*/*/*.bd
+#!ip/*/*/*.bxml
+
+#!ip/*/*/*/*/*.xci
