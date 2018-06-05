@@ -260,8 +260,8 @@ module ddr2pe#(
         .clk            (clk                ),
         .rst            (rst                ),
     
-        .start          (ibuf_start         ),
-        .done           (ibuf_ready         ),
+        .conf_valid     (ibuf_start         ),
+        .conf_ready     (ibuf_ready         ),
         .conf_mode      (ibuf_conf_mode     ),
         .conf_idx_num   (ibuf_conf_idx_num  ),
         .conf_mask      (ibuf_conf_mask     ),
@@ -309,8 +309,8 @@ module ddr2pe#(
         .clk            (clk                ),
         .rst            (rst                ),
 
-        .start          (dbuf_start         ),
-        .done           (dbuf_ready         ),
+        .conf_valid     (dbuf_start         ),
+        .conf_ready     (dbuf_ready         ),
         .conf_mode      (dbuf_mode          ),
         .conf_ch_num    (dbuf_ch_num        ),
         .conf_row_num   (dbuf_row_num       ),
@@ -367,8 +367,8 @@ module ddr2pe#(
         .clk            (clk                ),
         .rst            (rst                ),
     
-        .start          (pbuf_start         ),
-        .done           (pbuf_ready         ),
+        .conf_valid     (pbuf_start         ),
+        .conf_ready     (pbuf_ready         ),
         .conf_trans_num (pbuf_trans_num     ),
         .conf_mode      (pbuf_mode          ),
         .conf_ch_num    (pbuf_ch_num        ),
@@ -424,8 +424,8 @@ module ddr2pe#(
         .clk            (clk                    ),
         .rst            (rst                    ),
     
-        .start          (abuf_start             ),
-        .done           (abuf_ready             ),
+        .conf_valid     (abuf_start             ),
+        .conf_ready     (abuf_ready             ),
         .conf_trans_type(abuf_trans_type        ),
         .conf_trans_num (abuf_trans_num         ),
         .conf_mask      (abuf_mask              ),

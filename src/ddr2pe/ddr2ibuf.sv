@@ -11,8 +11,8 @@ module ddr2ibuf#(
     input   rst,
     
     // configuration port
-    input                   start,
-    output                  done,
+    input                   conf_valid,
+    output                  conf_ready,
     input   [4      -1 : 0] conf_mode,
     input   [8      -1 : 0] conf_idx_num,
     input   [PE_NUM -1 : 0] conf_mask,
@@ -39,7 +39,7 @@ module ddr2ibuf#(
     reg     [PE_NUM -1 : 0] idx_wr_en_r;
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid && conf_ready) begin
             batch_cnt_r <= 0;
         end
         else if (ddr_valid) begin
@@ -48,7 +48,7 @@ module ddr2ibuf#(
     end
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid && conf_ready) begin
             idx_cnt_r <= 0;
         end
         else if (ddr_valid) begin
@@ -99,22 +99,22 @@ module ddr2ibuf#(
         end
     end
     
-    // done signal
-    reg     done_r;
+    // conf_ready signal
+    reg     conf_ready_r;
     
     always @ (posedge clk) begin
         if (rst) begin
-            done_r <= 1'b1;
+            conf_ready_r <= 1'b1;
         end
-        else if (start) begin
-            done_r <= 1'b0;
+        else if (conf_valid && conf_ready) begin
+            conf_ready_r <= 1'b0;
         end
         else if (idx_cnt_r == conf_idx_num && ddr_valid) begin
-            done_r <= 1'b1;
+            conf_ready_r <= 1'b1;
         end
     end
     
-    assign  done = done_r;
+    assign  conf_ready = conf_ready_r;
     
     assign  idx_wr_en   = idx_wr_en_r;
     assign  idx_wr_data = idx_wr_data_r;
