@@ -267,7 +267,7 @@ module top_control#(
                 end
             end
             SAVE_WAIT: begin
-                if (ddr2pe_ins_ready && pe_done[pe2ddr_id_r]) begin
+                if (pe2ddr_ins_ready && pe_done[pe2ddr_id_r]) begin
                     save_stat_r <= SAVE_WORK;
                 end
             end
