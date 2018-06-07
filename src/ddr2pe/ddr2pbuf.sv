@@ -57,11 +57,7 @@ module ddr2pbuf#(
     reg     param_last_r;
         
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             param_cnt_r <= 0;
         end
         else if (ddr2_valid) begin
@@ -73,11 +69,7 @@ module ddr2pbuf#(
         if (rst) begin
             param_last_r <= 1'b1;
         end
-<<<<<<< HEAD
         else if (conf_valid && conf_ready) begin
-=======
-        else if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             param_last_r <= 1'b0;
         end
         else if (param_cnt_r > conf_trans_num) begin
@@ -105,11 +97,7 @@ module ddr2pbuf#(
     reg             update_last_r;
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             ch_cnt_r <= 0;
         end
         else if (ddr1_valid && ddr2_valid) begin
@@ -123,11 +111,7 @@ module ddr2pbuf#(
     end
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             row_cnt_r <= 0;
             pix_cnt_r <= 0;
         end
@@ -271,11 +255,7 @@ module ddr2pbuf#(
     
     reg     [ADDR_W -1 : 0] bbuf_acc_addr_r;
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             bbuf_acc_addr_r <= 0;
         end
         else if (bbuf_acc_en) begin
@@ -295,11 +275,7 @@ module ddr2pbuf#(
         if (rst) begin
             conf_ready_r <= 1'b1;
         end
-<<<<<<< HEAD
         else if (conf_valid && conf_ready) begin
-=======
-        else if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             conf_ready_r <= 1'b0;
         end
         else begin

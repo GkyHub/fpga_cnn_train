@@ -39,11 +39,7 @@ module ddr2ibuf#(
     reg     [PE_NUM -1 : 0] idx_wr_en_r;
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             batch_cnt_r <= 0;
         end
         else if (ddr_valid) begin
@@ -52,11 +48,7 @@ module ddr2ibuf#(
     end
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             idx_cnt_r <= 0;
         end
         else if (ddr_valid) begin
@@ -107,22 +99,14 @@ module ddr2ibuf#(
         end
     end
     
-<<<<<<< HEAD
     // conf_ready signal
-=======
-    // done signal
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
     reg     conf_ready_r;
     
     always @ (posedge clk) begin
         if (rst) begin
             conf_ready_r <= 1'b1;
         end
-<<<<<<< HEAD
         else if (conf_valid && conf_ready) begin
-=======
-        else if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             conf_ready_r <= 1'b0;
         end
         else if (idx_cnt_r == conf_idx_num && ddr_valid) begin

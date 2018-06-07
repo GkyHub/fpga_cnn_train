@@ -49,11 +49,7 @@ module ddr2abuf#(
     reg     [TD_RATE-1:0][BATCH-1:0][DATA_W-1:0] abuf_tail_buf_r;
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             abuf_tail_addr_r<= 0;
             abuf_pack_cnt_r <= 0; 
         end
@@ -76,11 +72,7 @@ module ddr2abuf#(
     reg     [DDR_W  -1 : 0] abuf_data_buf_r;
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             abuf_data_addr_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b00) begin
@@ -106,11 +98,7 @@ module ddr2abuf#(
     assign  bbuf_tail_pack = ddr_data[TPACK_SIZE*DATA_W-1 : 0];
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             bbuf_tail_cnt_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b11) begin
@@ -123,11 +111,7 @@ module ddr2abuf#(
     end
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             bbuf_tail_addr_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b11) begin
@@ -149,11 +133,7 @@ module ddr2abuf#(
     assign  bbuf_data_pack = ddr_data;
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             bbuf_data_cnt_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b10) begin
@@ -166,11 +146,7 @@ module ddr2abuf#(
     end
     
     always @ (posedge clk) begin
-<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
-=======
-        if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             bbuf_data_addr_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b10) begin
@@ -263,11 +239,7 @@ module ddr2abuf#(
         if (rst) begin
             byte_cnt_r <= 0;
         end
-<<<<<<< HEAD
         else if (conf_valid && conf_ready) begin
-=======
-        else if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             byte_cnt_r <= 0;
         end
         else if (ddr_valid && ddr_ready) begin
@@ -279,11 +251,7 @@ module ddr2abuf#(
         if (rst) begin
             conf_ready_r <= 1'b1;
         end
-<<<<<<< HEAD
         else if (conf_valid && conf_ready) begin
-=======
-        else if (conf_valid) begin
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             conf_ready_r <= 1'b0;
         end
         else if (byte_cnt_r > conf_trans_num) begin

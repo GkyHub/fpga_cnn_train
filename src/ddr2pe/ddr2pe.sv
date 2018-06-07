@@ -259,19 +259,8 @@ module ddr2pe#(
     ddr2ibuf#(
         .IDX_DEPTH  (IDX_DEPTH  )
     ) ddr2ibuf_inst (
-<<<<<<< HEAD
-        .clk            (clk                ),
-        .rst            (rst                ),
-    
-        .conf_valid     (ibuf_start         ),
-        .conf_ready     (ibuf_ready         ),
-        .conf_mode      (ibuf_conf_mode     ),
-        .conf_idx_num   (ibuf_conf_idx_num  ),
-        .conf_mask      (ibuf_conf_mask     ),
-=======
         .clk            (clk                    ),
         .rst            (rst                    ),
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
     
         .conf_valid     (ibuf_conf_valid        ),
         .conf_ready     (ibuf_conf_ready        ),
@@ -294,18 +283,6 @@ module ddr2pe#(
         .clk            (clk                    ),
         .rst            (rst                    ),
 
-<<<<<<< HEAD
-        .conf_valid     (dbuf_start         ),
-        .conf_ready     (dbuf_ready         ),
-        .conf_mode      (dbuf_mode          ),
-        .conf_ch_num    (dbuf_ch_num        ),
-        .conf_row_num   (dbuf_row_num       ),
-        .conf_pix_num   (dbuf_pix_num       ),
-        .conf_mask      (dbuf_mask          ),
-        .conf_depool    (dbuf_depool        ),
-    
-        .ddr1_data      (ddr1_data          ),
-=======
         .conf_valid     (dbuf_conf_valid        ),
         .conf_ready     (dbuf_conf_ready        ),
         .conf_mode      (dbuf_conf_mode         ),
@@ -316,7 +293,6 @@ module ddr2pe#(
         .conf_depool    (dbuf_conf_depool       ),
     
         .ddr1_data      (ddr1_data              ),
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
         .ddr1_valid     (ddr1_valid && dbuf_ddr_sel[0]),
         .ddr1_ready     (dbuf_ddr1_ready        ),
 
@@ -332,22 +308,6 @@ module ddr2pe#(
     ddr2pbuf#(
         .BUF_DEPTH  (BUF_DEPTH  )
     ) ddr2pbuf_inst (
-<<<<<<< HEAD
-        .clk            (clk                ),
-        .rst            (rst                ),
-    
-        .conf_valid     (pbuf_start         ),
-        .conf_ready     (pbuf_ready         ),
-        .conf_trans_num (pbuf_trans_num     ),
-        .conf_mode      (pbuf_mode          ),
-        .conf_ch_num    (pbuf_ch_num        ),
-        .conf_pix_num   (pbuf_pix_num       ),
-        .conf_row_num   (pbuf_row_num       ),
-        .conf_depool    (pbuf_depool        ),
-        .conf_mask      (pbuf_mask          ),
-    
-        .ddr1_data      (ddr1_data          ),
-=======
         .clk            (clk                    ),
         .rst            (rst                    ),
     
@@ -362,7 +322,6 @@ module ddr2pe#(
         .conf_mask      (pbuf_conf_mask         ),
     
         .ddr1_data      (ddr1_data              ),
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
         .ddr1_valid     (ddr1_valid && pbuf_ddr_sel[0]),
         .ddr1_ready     (pbuf_ddr1_ready        ),
 
@@ -387,19 +346,11 @@ module ddr2pe#(
         .clk            (clk                    ),
         .rst            (rst                    ),
     
-<<<<<<< HEAD
-        .conf_valid     (abuf_start             ),
-        .conf_ready     (abuf_ready             ),
-        .conf_trans_type(abuf_trans_type        ),
-        .conf_trans_num (abuf_trans_num         ),
-        .conf_mask      (abuf_mask              ),
-=======
         .conf_valid     (abuf_conf_valid        ),
         .conf_ready     (abuf_conf_ready        ),
         .conf_trans_type(abuf_conf_trans_type   ),
         .conf_trans_num (abuf_conf_trans_num    ),
         .conf_mask      (abuf_conf_mask         ),
->>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
     
         .ddr_data       (ddr2_data              ),
         .ddr_valid      (ddr2_valid && abuf_ddr_sel),
