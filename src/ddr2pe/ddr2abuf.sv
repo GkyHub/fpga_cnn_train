@@ -12,8 +12,8 @@ module ddr2abuf#(
     input   clk,
     input   rst,
     
-    input                   start,
-    output                  done,
+    input                   conf_valid,
+    output                  conf_ready,
     input   [2      -1 : 0] conf_trans_type,
     input   [16     -1 : 0] conf_trans_num,
     input   [PE_NUM -1 : 0] conf_mask,
@@ -49,7 +49,7 @@ module ddr2abuf#(
     reg     [TD_RATE-1:0][BATCH-1:0][DATA_W-1:0] abuf_tail_buf_r;
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             abuf_tail_addr_r<= 0;
             abuf_pack_cnt_r <= 0; 
         end
@@ -74,7 +74,7 @@ module ddr2abuf#(
     reg     [DDR_W  -1 : 0] abuf_data_buf_r;
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             abuf_data_addr_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b00) begin
@@ -100,7 +100,7 @@ module ddr2abuf#(
     assign  bbuf_tail_pack = ddr_data[TPACK_SIZE*DATA_W-1 : 0];
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             bbuf_tail_cnt_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b11) begin
@@ -113,7 +113,7 @@ module ddr2abuf#(
     end
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             bbuf_tail_addr_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b11) begin
@@ -135,7 +135,7 @@ module ddr2abuf#(
     assign  bbuf_data_pack = ddr_data;
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             bbuf_data_cnt_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b10) begin
@@ -148,7 +148,7 @@ module ddr2abuf#(
     end
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             bbuf_data_addr_r <= 0;
         end
         else if (ddr_valid && conf_trans_type == 2'b10) begin
@@ -233,15 +233,15 @@ module ddr2abuf#(
     assign  bbuf_wr_data_en = bbuf_wr_data_en_r;
     assign  bbuf_wr_tail_en = bbuf_wr_tail_en_r;
     
-    // done signal
-    reg     done_r;
+    // conf_ready signal
+    reg     conf_ready_r;
     reg     [16 -1 : 0] byte_cnt_r;
     
     always @ (posedge clk) begin
         if (rst) begin
             byte_cnt_r <= 0;
         end
-        else if (start) begin
+        else if (conf_valid) begin
             byte_cnt_r <= 0;
         end
         else if (ddr_valid && ddr_ready) begin
@@ -251,17 +251,17 @@ module ddr2abuf#(
     
     always @ (posedge clk) begin
         if (rst) begin
-            done_r <= 1'b1;
+            conf_ready_r <= 1'b1;
         end
-        else if (start) begin
-            done_r <= 1'b0;
+        else if (conf_valid) begin
+            conf_ready_r <= 1'b0;
         end
         else if (byte_cnt_r > conf_trans_num) begin
-            done_r <= 1'b1;
+            conf_ready_r <= 1'b1;
         end
     end
     
-    assign  done = done_r;
+    assign  conf_ready = conf_ready_r;
     
     // ready signal
     reg     ddr_ready_r;

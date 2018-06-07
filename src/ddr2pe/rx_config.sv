@@ -22,8 +22,8 @@ module rx_config#(
     input   [INST_W -1 : 0] ins,
 
     // return signal
-    output  [PE_NUM -1 ：0] buf_mask,
-    output  [4      -1 : 0] buf_type, {i, d, p, a}
+    output  [6      -1 ：0] rx_done_buf_id,
+    output  [4      -1 : 0] rx_done_opcode,
     output                  rx_done_pulse,
 
     // configuration port
@@ -300,6 +300,7 @@ module rx_config#(
     end
     
     reg     ready_r;
+    assign  ins_ready = ready_r;
     
     always @ (posedge clk) begin
         if (rst) begin
@@ -311,38 +312,20 @@ module rx_config#(
         else if (config_stat_r == STAT_WORK && all_conf_ready) begin
             ready_r <= 1'b1;
         end
-    end
-    
-    assign  ins_ready = ready_r;
+    end    
 
-//=============================================================================
-// Done Pulse Logic
-//=============================================================================
-
-    reg     [PE_NUM -1 ：0] buf_mask_r;
-    reg     [4      -1 : 0] buf_type_r;
+    reg     [PE_NUM -1 ：0] rx_done_opcode_r;
+    reg     [4      -1 : 0] rx_done_buf_id_r;
+    assign  rx_done_buf_id = rx_done_buf_id_r;
+    assign  rx_done_opcode = rx_done_opcode_r;
 
     always @ (posedge clk) begin
-        if (rst) begin
-            buf_mask_r <= '0;
-            buf_type_r <= 4'b0000;
-        end
-        else if (ins_valid && ins_ready) begin
-            case(opcode)
-            RD_OP_DW: begin
-                buf_mask_r      <= layer_type[0] ? (1 << buf_id) : (15 << (buf_id << 2));
-                buf_type_r[3]   <= 1'b1;
-            end
-            RD_OP_D: begin
-                buf_mask_r      <= '1;
-                buf_type_r[2]   <= 1'b1;
-            end
-            RD_OP_G: begin
-                buf_mask_r      <= '1;
-                buf_type_r[2]   <= 1'b1;
-            end
-            endcase
+        if (ins_valid && ins_ready) begin
+            rx_done_opcode_r <= opcode;
+            rx_done_buf_id_r <= buf_id;
         end
     end
+
+    posedge2pulse rx_done(.clk(clk), .rst(rst), .a(all_conf_ready), .b(rx_done_pulse));
 
 endmodule

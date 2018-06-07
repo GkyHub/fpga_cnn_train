@@ -12,8 +12,8 @@ module ddr2dbuf#(
     input   rst,
     
     // configuration port
-    input                   start,
-    output                  done,
+    input                   conf_valid,
+    output                  conf_ready,
     input   [4      -1 : 0] conf_mode,
     input   [4      -1 : 0] conf_ch_num,
     input   [4      -1 : 0] conf_row_num, 
@@ -54,7 +54,7 @@ module ddr2dbuf#(
     wire    conv_ddr_valid = (conf_mode[2:1] == 2'b01) ? (ddr1_valid && ddr2_valid) : ddr1_valid;
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             ch_cnt_r <= 0;
         end
         else if (conv_ddr_valid) begin
@@ -68,7 +68,7 @@ module ddr2dbuf#(
     end
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             row_cnt_r <= 0;
             pix_cnt_r <= 0;
         end
@@ -105,7 +105,7 @@ module ddr2dbuf#(
     reg                     fc_last_r;
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             fc_addr_r <= 0;
         end
         else if (ddr1_valid) begin
@@ -213,32 +213,32 @@ module ddr2dbuf#(
     assign  dbuf_wr_en      = dbuf_wr_en_r;
     
 //=============================================================================
-// done signal
+// conf_ready signal
 //=============================================================================
 
-    reg done_r;
+    reg conf_ready_r;
     
     always @ (posedge clk) begin
         if (rst) begin
-            done_r <= 1'b1;
+            conf_ready_r <= 1'b1;
         end
-        else if (start) begin
-            done_r <= 1'b0;
+        else if (conf_valid) begin
+            conf_ready_r <= 1'b0;
         end
         else begin
             if (conf_mode[0]) begin
                 if (fc_last_r) begin
-                    done_r <= 1'b1;
+                    conf_ready_r <= 1'b1;
                 end
             end
             else begin
                 if (conv_last_r) begin
-                    done_r <= 1'b1;
+                    conf_ready_r <= 1'b1;
                 end
             end
         end
     end
     
-    assign  done = done_r;
+    assign  conf_ready = conf_ready_r;
     
 endmodule

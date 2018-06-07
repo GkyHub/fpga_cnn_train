@@ -13,8 +13,8 @@ module ddr2pbuf#(
     input   rst,
     
     // configuration port
-    input                   start,
-    output                  done,
+    input                   conf_valid,
+    output                  conf_ready,
     input   [12     -1 : 0] conf_trans_num,
     input   [4      -1 : 0] conf_mode,
     input   [4      -1 : 0] conf_ch_num,    // only for update
@@ -57,7 +57,7 @@ module ddr2pbuf#(
     reg     param_last_r;
         
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             param_cnt_r <= 0;
         end
         else if (ddr2_valid) begin
@@ -69,7 +69,7 @@ module ddr2pbuf#(
         if (rst) begin
             param_last_r <= 1'b1;
         end
-        else if (start) begin
+        else if (conf_valid) begin
             param_last_r <= 1'b0;
         end
         else if (param_cnt_r > conf_trans_num) begin
@@ -97,7 +97,7 @@ module ddr2pbuf#(
     reg             update_last_r;
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             ch_cnt_r <= 0;
         end
         else if (ddr1_valid && ddr2_valid) begin
@@ -111,7 +111,7 @@ module ddr2pbuf#(
     end
     
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             row_cnt_r <= 0;
             pix_cnt_r <= 0;
         end
@@ -255,7 +255,7 @@ module ddr2pbuf#(
     
     reg     [ADDR_W -1 : 0] bbuf_acc_addr_r;
     always @ (posedge clk) begin
-        if (start) begin
+        if (conf_valid) begin
             bbuf_acc_addr_r <= 0;
         end
         else if (bbuf_acc_en) begin
@@ -266,32 +266,32 @@ module ddr2pbuf#(
     assign  bbuf_acc_addr = bbuf_acc_addr_r;
     
 //=============================================================================
-// done signal
+// conf_ready signal
 //=============================================================================
 
-    reg done_r;
+    reg conf_ready_r;
     
     always @ (posedge clk) begin
         if (rst) begin
-            done_r <= 1'b1;
+            conf_ready_r <= 1'b1;
         end
-        else if (start) begin
-            done_r <= 1'b0;
+        else if (conf_valid) begin
+            conf_ready_r <= 1'b0;
         end
         else begin
             if (conf_mode[2:1] == 2'b10) begin
                 if (update_last_r) begin
-                    done_r <= 1'b1;
+                    conf_ready_r <= 1'b1;
                 end
             end
             else begin
                 if (param_last_r) begin
-                    done_r <= 1'b1;
+                    conf_ready_r <= 1'b1;
                 end
             end
         end
     end
     
-    assign  done = done_r;
+    assign  conf_ready = conf_ready_r;
     
 endmodule
