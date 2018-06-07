@@ -66,6 +66,10 @@ module fpga_cnn_train_top#(
     wire                    pe2ddr_ins_valid;
     wire                    pe2ddr_ins_ready;
     wire    [INST_W -1 : 0] pe2ddr_ins;
+
+    wire    [6      -1 : 0] rx_done_buf_id;
+    wire    [4      -1 : 0] rx_done_opcode;
+    wire                    rx_done_pulse;
     
     wire    [IDX_W*2        -1 : 0] idx_wr_data;
     wire    [bw(IDX_DEPTH)  -1 : 0] idx_wr_addr;
@@ -146,6 +150,10 @@ module fpga_cnn_train_top#(
         .pe2ddr_ins_valid   (pe2ddr_ins_valid   ),
         .pe2ddr_ins_ready   (pe2ddr_ins_ready   ),
         .pe2ddr_ins         (pe2ddr_ins         ),
+
+        .rx_done_buf_id (rx_done_buf_id     ),
+        .rx_done_opcode (rx_done_opcode     ),
+        .rx_done_pulse  (rx_done_pulse      ),
     
         .conf_layer_type    (conf_layer_type    ),
         .conf_in_ch_seg     (conf_in_ch_seg     ),
@@ -183,6 +191,10 @@ module fpga_cnn_train_top#(
         .ins_valid      (ddr2pe_ins_valid   ),
         .ins_ready      (ddr2pe_ins_ready   ),
         .ins            (ddr2pe_ins         ),
+
+        .rx_done_buf_id (rx_done_buf_id     ),
+        .rx_done_opcode (rx_done_opcode     ),
+        .rx_done_pulse  (rx_done_pulse      ),
     
         .ddr1_data      (ddr1_in_data       ),
         .ddr1_valid     (ddr1_in_valid      ),

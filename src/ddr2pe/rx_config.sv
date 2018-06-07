@@ -3,7 +3,7 @@ import GLOBAL_PARAM::TAIL_W;
 import INS_CONST::*;
 
 module rx_config#(
-    parameter PE_NUM    = 32,
+    parameter PE_NUM    = 32
     )(
     input           clk,
     input           rst,
@@ -22,7 +22,7 @@ module rx_config#(
     input   [INST_W -1 : 0] ins,
 
     // return signal
-    output  [6      -1 ：0] rx_done_buf_id,
+    output  [6      -1 : 0] rx_done_buf_id,
     output  [4      -1 : 0] rx_done_opcode,
     output                  rx_done_pulse,
 
@@ -314,8 +314,8 @@ module rx_config#(
         end
     end    
 
-    reg     [PE_NUM -1 ：0] rx_done_opcode_r;
-    reg     [4      -1 : 0] rx_done_buf_id_r;
+    reg     [6  -1 : 0] rx_done_opcode_r;
+    reg     [4  -1 : 0] rx_done_buf_id_r;
     assign  rx_done_buf_id = rx_done_buf_id_r;
     assign  rx_done_opcode = rx_done_opcode_r;
 

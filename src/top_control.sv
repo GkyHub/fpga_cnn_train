@@ -25,6 +25,11 @@ module top_control#(
     output                  pe2ddr_ins_valid,
     input                   pe2ddr_ins_ready,
     output  [INST_W -1 : 0] pe2ddr_ins,
+
+    // receive ddr2pe done signal
+    input   [6      -1 : 0] rx_done_buf_id,
+    input   [4      -1 : 0] rx_done_opcode,
+    input                   rx_done_pulse,
     
     // layer configuration interface
     output  [3 : 0] conf_layer_type,

@@ -24,7 +24,7 @@ module ddr2pe#(
     input   [INST_W -1 : 0] ins,
 
     // instruction done information
-    output  [6      -1 ：0] rx_done_buf_id,
+    output  [6      -1 : 0] rx_done_buf_id,
     output  [4      -1 : 0] rx_done_opcode,
     output                  rx_done_pulse,
     
