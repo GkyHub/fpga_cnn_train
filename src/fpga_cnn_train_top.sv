@@ -156,13 +156,13 @@ module fpga_cnn_train_top#(
         .conf_relu          (conf_relu          ),
         .conf_depool        (conf_depool        ),
     
-        .switch_d   (switch_d   ),
-        .switch_p   (switch_p   ),
-        .switch_i   (switch_i   ),
-        .switch_a   (switch_a   ),
-        .switch_b   (switch_b   ),
-
-        .pe_done    (pe_done    )
+        .switch_d           (switch_d           ),
+        .switch_p           (switch_p           ),
+        .switch_i           (switch_i           ),
+        .switch_a           (switch_a           ),
+        .switch_b           (switch_b           ),
+                
+        .pe_done            (pe_done            )
     );
  
     ddr2pe#(

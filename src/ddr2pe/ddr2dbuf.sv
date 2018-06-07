@@ -54,7 +54,11 @@ module ddr2dbuf#(
     wire    conv_ddr_valid = (conf_mode[2:1] == 2'b01) ? (ddr1_valid && ddr2_valid) : ddr1_valid;
     
     always @ (posedge clk) begin
+<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
+=======
+        if (conf_valid) begin
+>>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             ch_cnt_r <= 0;
         end
         else if (conv_ddr_valid) begin
@@ -68,7 +72,11 @@ module ddr2dbuf#(
     end
     
     always @ (posedge clk) begin
+<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
+=======
+        if (conf_valid) begin
+>>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             row_cnt_r <= 0;
             pix_cnt_r <= 0;
         end
@@ -105,7 +113,11 @@ module ddr2dbuf#(
     reg                     fc_last_r;
     
     always @ (posedge clk) begin
+<<<<<<< HEAD
         if (conf_valid && conf_ready) begin
+=======
+        if (conf_valid) begin
+>>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             fc_addr_r <= 0;
         end
         else if (ddr1_valid) begin
@@ -222,7 +234,11 @@ module ddr2dbuf#(
         if (rst) begin
             conf_ready_r <= 1'b1;
         end
+<<<<<<< HEAD
         else if (conf_valid && conf_ready) begin
+=======
+        else if (conf_valid) begin
+>>>>>>> 60554c7037d894b3799ea46f5d343372896bb277
             conf_ready_r <= 1'b0;
         end
         else begin
