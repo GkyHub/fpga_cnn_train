@@ -12,14 +12,9 @@
 ip/managed_ip_project
 ip/ip_user_files
 
-#ip/*/*
-#!ip/*/*.xci
-#!ip/*/*.xml
-#!ip/*/*.veo
-#!ip/*/*.vho
+ip/**/*.*
+ip/**/*.xci
+ip/**/*.xml
+ip/**/*.veo
+ip/**/*.vho
 
-#ip/*/*/*
-#!ip/*/*/*.bd
-#!ip/*/*/*.bxml
-
-#!ip/*/*/*/*/*.xci
