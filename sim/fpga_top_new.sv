@@ -33,8 +33,8 @@ module fpga_top #(
     parameter SIMULATION            = "FALSE"
 `endif
     )(
-    input     sys_rst, //Common port for all controllers
-
+    input       sys_rst,    // Common port for all controllers
+    input       core_clk,   // design logic clock
 
     output                  c0_init_calib_complete,
     output                  c0_data_compare_error,
@@ -80,7 +80,11 @@ module fpga_top #(
     localparam MEM_ADDR_ORDER   = "ROW_COLUMN_BANK";
     localparam DBG_WR_STS_WIDTH = 32;
     localparam DBG_RD_STS_WIDTH = 32;
-    localparam ECC              = "OFF";
+    localparam ECC              = "OFF";    
+
+//***************************************************************************
+// DDR4 0 MIG instantiation
+//***************************************************************************
 
     wire  [APP_ADDR_WIDTH -1:0] c0_ddr4_app_addr;
     wire  [2:0]                 c0_ddr4_app_cmd;
@@ -160,10 +164,6 @@ module fpga_top #(
     wire c0_ddr4_reset_n_int;
     assign c0_ddr4_reset_n = c0_ddr4_reset_n_int;
 
-//***************************************************************************
-// DDR4 0 MIG instantiation
-//***************************************************************************
-
     ddr4_0 u_ddr4_c0(
         .sys_rst                  (sys_rst                ),
         .c0_sys_clk_p             (c0_sys_clk_p           ),
@@ -238,10 +238,10 @@ module fpga_top #(
 // AXI 0 Datamover instantiation
 //***************************************************************************
 
-    reg c0_init_calib_complete_r;
+    reg c0_datamover_rstn_r;
 
-    always @ (posedge c0_ddr4_clk) begin
-        c0_init_calib_complete_r <= c0_init_calib_complete;
+    always @ (posedge c1_ddr4_clk) begin
+        c0_datamover_rstn_r     <= !c0_ddr4_rst & c0_init_calib_complete;
     end
 
     wire  [255: 0]  s_axis_s2mm_tdata_c0;
@@ -285,12 +285,12 @@ module fpga_top #(
 
 
     axi_datamover_0 datamover_c0 (
-        .m_axi_mm2s_aclk            (c0_ddr4_clk),                      // input wire m_axi_mm2s_aclk
-        .m_axi_mm2s_aresetn         (!c0_ddr4_rst & c0_init_calib_complete_r),// input wire m_axi_mm2s_aresetn
-        .mm2s_err                   (mm2s_err   ),                      // output wire mm2s_err
+        .m_axi_mm2s_aclk            (c0_ddr4_clk                    ),  // input wire m_axi_mm2s_aclk
+        .m_axi_mm2s_aresetn         (c0_datamover_rstn_r            ),  // input wire m_axi_mm2s_aresetn
+        .mm2s_err                   (mm2s_err                       ),  // output wire mm2s_err
         
-        .m_axis_mm2s_cmdsts_aclk    (m_axis_mm2s_cmdsts_aclk_c0     ),  // input wire m_axis_mm2s_cmdsts_aclk
-        .m_axis_mm2s_cmdsts_aresetn (m_axis_mm2s_cmdsts_aresetn_c0  ),  // input wire m_axis_mm2s_cmdsts_aresetn
+        .m_axis_mm2s_cmdsts_aclk    (core_clk                       ),  // input wire m_axis_mm2s_cmdsts_aclk
+        .m_axis_mm2s_cmdsts_aresetn (core_rst_r                     ),  // input wire m_axis_mm2s_cmdsts_aresetn
         .s_axis_mm2s_cmd_tvalid     (s_axis_mm2s_cmd_tvalid_c0      ),  // input wire s_axis_mm2s_cmd_tvalid
         .s_axis_mm2s_cmd_tready     (s_axis_mm2s_cmd_tready_c0      ),  // output wire s_axis_mm2s_cmd_tready
         .s_axis_mm2s_cmd_tdata      (s_axis_mm2s_cmd_tdata_c0       ),  // input wire [71 : 0] s_axis_mm2s_cmd_tdata
@@ -320,12 +320,12 @@ module fpga_top #(
         .m_axis_mm2s_tvalid         (m_axis_mm2s_tvalid_c0          ),  // output wire m_axis_mm2s_tvalid
         .m_axis_mm2s_tready         (m_axis_mm2s_tready_c0          ),  // input wire m_axis_mm2s_tready
 
-        .m_axi_s2mm_aclk            (c0_ddr4_clk),                      // input wire m_axi_s2mm_aclk
-        .m_axi_s2mm_aresetn         (!c0_ddr4_rst & c0_init_calib_complete_r),// input wire m_axi_s2mm_aresetn
-        .s2mm_err                   (s2mm_err   ),                      // output wire s2mm_err
+        .m_axi_s2mm_aclk            (c0_ddr4_clk                    ),  // input wire m_axi_s2mm_aclk
+        .m_axi_s2mm_aresetn         (c0_datamover_rstn_r            ),  // input wire m_axi_s2mm_aresetn
+        .s2mm_err                   (s2mm_err                       ),  // output wire s2mm_err
 
-        .m_axis_s2mm_cmdsts_awclk   (m_axis_s2mm_cmdsts_awclk_c0    ),  // input wire m_axis_s2mm_cmdsts_awclk
-        .m_axis_s2mm_cmdsts_aresetn (m_axis_s2mm_cmdsts_aresetn_c0  ),  // input wire m_axis_s2mm_cmdsts_aresetn
+        .m_axis_s2mm_cmdsts_awclk   (core_clk                       ),  // input wire m_axis_s2mm_cmdsts_awclk
+        .m_axis_s2mm_cmdsts_aresetn (core_rst_r                     ),  // input wire m_axis_s2mm_cmdsts_aresetn
         .s_axis_s2mm_cmd_tvalid     (s_axis_s2mm_cmd_tvalid_c0      ),  // input wire s_axis_s2mm_cmd_tvalid
         .s_axis_s2mm_cmd_tready     (s_axis_s2mm_cmd_tready_c0      ),  // output wire s_axis_s2mm_cmd_tready
         .s_axis_s2mm_cmd_tdata      (s_axis_s2mm_cmd_tdata_c0       ),  // input wire [71 : 0] s_axis_s2mm_cmd_tdata
@@ -363,6 +363,84 @@ module fpga_top #(
 //***************************************************************************
 // DDR4 1 MIG instantiation
 //***************************************************************************
+
+    wire  [APP_ADDR_WIDTH -1:0] c1_ddr4_app_addr;
+    wire  [2:0]                 c1_ddr4_app_cmd;
+    wire                        c1_ddr4_app_en;
+    wire  [APP_DATA_WIDTH -1:0] c1_ddr4_app_wdf_data;
+    wire                        c1_ddr4_app_wdf_end;
+    wire  [APP_MASK_WIDTH -1:0] c1_ddr4_app_wdf_mask;
+    wire                        c1_ddr4_app_wdf_wren;
+    wire  [APP_DATA_WIDTH -1:0] c1_ddr4_app_rd_data;
+    wire                        c1_ddr4_app_rd_data_end;
+    wire                        c1_ddr4_app_rd_data_valid;
+    wire                        c1_ddr4_app_rdy;
+    wire                        c1_ddr4_app_wdf_rdy;
+    wire                        c1_ddr4_clk;
+    wire                        c1_ddr4_rst;
+    wire                        c1_wr_rd_complete;
+
+
+    reg                         c1_ddr4_aresetn;
+    wire                        c1_ddr4_data_msmatch_err;
+    wire                        c1_ddr4_write_err;
+    wire                        c1_ddr4_read_err;
+    wire                        c1_ddr4_test_cmptd;
+    wire                        c1_ddr4_write_cmptd;
+    wire                        c1_ddr4_read_cmptd;
+    wire                        c1_ddr4_cmptd_one_wr_rd;
+
+    // Slave Interface Write Address Ports
+    wire [7:0]                  c1_ddr4_s_axi_awid;
+    wire [31:0]                 c1_ddr4_s_axi_awaddr;
+    wire [7:0]                  c1_ddr4_s_axi_awlen;
+    wire [2:0]                  c1_ddr4_s_axi_awsize;
+    wire [1:0]                  c1_ddr4_s_axi_awburst;
+    wire [3:0]                  c1_ddr4_s_axi_awcache;
+    wire [2:0]                  c1_ddr4_s_axi_awprot;
+    wire                        c1_ddr4_s_axi_awvalid;
+    wire                        c1_ddr4_s_axi_awready;
+     // Slave Interface Write Data Ports
+    wire [255:0]                c1_ddr4_s_axi_wdata;
+    wire [31:0]                 c1_ddr4_s_axi_wstrb;
+    wire                        c1_ddr4_s_axi_wlast;
+    wire                        c1_ddr4_s_axi_wvalid;
+    wire                        c1_ddr4_s_axi_wready;
+     // Slave Interface Write Response Ports
+    wire                        c1_ddr4_s_axi_bready;
+    wire [0:0]                  c1_ddr4_s_axi_bid;
+    wire [1:0]                  c1_ddr4_s_axi_bresp;
+    wire                        c1_ddr4_s_axi_bvalid;
+     // Slave Interface Read Address Ports
+    wire [3:0]                  c1_ddr4_s_axi_arid;
+    wire [31:0]                 c1_ddr4_s_axi_araddr;
+    wire [7:0]                  c1_ddr4_s_axi_arlen;
+    wire [2:0]                  c1_ddr4_s_axi_arsize;
+    wire [1:0]                  c1_ddr4_s_axi_arburst;
+    wire [3:0]                  c1_ddr4_s_axi_arcache;
+    wire                        c1_ddr4_s_axi_arvalid;
+    wire                        c1_ddr4_s_axi_arready;
+     // Slave Interface Read Data Ports
+    wire                        c1_ddr4_s_axi_rready;
+    wire [0:0]                  c1_ddr4_s_axi_rid;
+    wire [255:0]                c1_ddr4_s_axi_rdata;
+    wire [1:0]                  c1_ddr4_s_axi_rresp;
+    wire                        c1_ddr4_s_axi_rlast;
+    wire                        c1_ddr4_s_axi_rvalid;
+
+    wire                        c1_ddr4_cmp_data_valid;
+    wire [255:0]                c1_ddr4_cmp_data;     // Compare data
+    wire [255:0]                c1_ddr4_rdata_cmp;      // Read data
+
+    wire                        c1_ddr4_dbg_wr_sts_vld;
+    wire [DBG_WR_STS_WIDTH-1:0] c1_ddr4_dbg_wr_sts;
+    wire                        c1_ddr4_dbg_rd_sts_vld;
+    wire [DBG_RD_STS_WIDTH-1:0] c1_ddr4_dbg_rd_sts;
+    assign c1_data_compare_error = c1_ddr4_data_msmatch_err | c1_ddr4_write_err | c1_ddr4_read_err;
+
+  
+    wire c1_ddr4_reset_n_int;
+    assign c1_ddr4_reset_n = c1_ddr4_reset_n_int;
 
     ddr4_0 u_ddr4_c1(
         .sys_rst                  (sys_rst                ),
@@ -438,10 +516,10 @@ module fpga_top #(
 // AXI 1 Datamover instantiation
 //***************************************************************************
 
-    reg c1_init_calib_complete_r;
+    reg c1_datamover_rstn_r;
 
     always @ (posedge c1_ddr4_clk) begin
-        c1_init_calib_complete_r <= c1_init_calib_complete;
+        c1_datamover_rstn_r     <= !c1_ddr4_rst & c1_init_calib_complete;
     end
 
     wire  [255: 0]  s_axis_s2mm_tdata_c1;
@@ -485,12 +563,12 @@ module fpga_top #(
 
 
     axi_datamover_0 datamover_c1 (
-        .m_axi_mm2s_aclk            (c1_ddr4_clk),                      // input wire m_axi_mm2s_aclk
-        .m_axi_mm2s_aresetn         (!c1_ddr4_rst & c1_init_calib_complete_r),// input wire m_axi_mm2s_aresetn
-        .mm2s_err                   (mm2s_err   ),                      // output wire mm2s_err
-        
-        .m_axis_mm2s_cmdsts_aclk    (m_axis_mm2s_cmdsts_aclk_c1     ),  // input wire m_axis_mm2s_cmdsts_aclk
-        .m_axis_mm2s_cmdsts_aresetn (m_axis_mm2s_cmdsts_aresetn_c1  ),  // input wire m_axis_mm2s_cmdsts_aresetn
+        .m_axi_mm2s_aclk            (c1_ddr4_clk                    ),
+        .m_axi_mm2s_aresetn         (c1_datamover_rstn_r            ),
+        .mm2s_err                   (mm2s_err                       ),
+
+        .m_axis_mm2s_cmdsts_aclk    (core_clk                       ),  // input wire m_axis_mm2s_cmdsts_aclk
+        .m_axis_mm2s_cmdsts_aresetn (core_rst_r                     ),  // input wire m_axis_mm2s_cmdsts_aresetn
         .s_axis_mm2s_cmd_tvalid     (s_axis_mm2s_cmd_tvalid_c1      ),  // input wire s_axis_mm2s_cmd_tvalid
         .s_axis_mm2s_cmd_tready     (s_axis_mm2s_cmd_tready_c1      ),  // output wire s_axis_mm2s_cmd_tready
         .s_axis_mm2s_cmd_tdata      (s_axis_mm2s_cmd_tdata_c1       ),  // input wire [71 : 0] s_axis_mm2s_cmd_tdata
@@ -520,12 +598,12 @@ module fpga_top #(
         .m_axis_mm2s_tvalid         (m_axis_mm2s_tvalid_c1          ),  // output wire m_axis_mm2s_tvalid
         .m_axis_mm2s_tready         (m_axis_mm2s_tready_c1          ),  // input wire m_axis_mm2s_tready
 
-        .m_axi_s2mm_aclk            (c1_ddr4_clk),                      // input wire m_axi_s2mm_aclk
-        .m_axi_s2mm_aresetn         (!c1_ddr4_rst & c1_init_calib_complete_r),// input wire m_axi_s2mm_aresetn
-        .s2mm_err                   (s2mm_err   ),                      // output wire s2mm_err
+        .m_axi_s2mm_aclk            (c1_ddr4_clk                    ),  // input wire m_axi_s2mm_aclk
+        .m_axi_s2mm_aresetn         (c1_datamover_rstn_r            ),  // input wire m_axi_s2mm_aresetn
+        .s2mm_err                   (s2mm_err                       ),  // output wire s2mm_err
 
-        .m_axis_s2mm_cmdsts_awclk   (m_axis_s2mm_cmdsts_awclk_c1    ),  // input wire m_axis_s2mm_cmdsts_awclk
-        .m_axis_s2mm_cmdsts_aresetn (m_axis_s2mm_cmdsts_aresetn_c1  ),  // input wire m_axis_s2mm_cmdsts_aresetn
+        .m_axis_s2mm_cmdsts_awclk   (core_clk                       ),  // input wire m_axis_s2mm_cmdsts_awclk
+        .m_axis_s2mm_cmdsts_aresetn (core_rst_r                     ),  // input wire m_axis_s2mm_cmdsts_aresetn
         .s_axis_s2mm_cmd_tvalid     (s_axis_s2mm_cmd_tvalid_c1      ),  // input wire s_axis_s2mm_cmd_tvalid
         .s_axis_s2mm_cmd_tready     (s_axis_s2mm_cmd_tready_c1      ),  // output wire s_axis_s2mm_cmd_tready
         .s_axis_s2mm_cmd_tdata      (s_axis_s2mm_cmd_tdata_c1       ),  // input wire [71 : 0] s_axis_s2mm_cmd_tdata
@@ -559,16 +637,108 @@ module fpga_top #(
         .s_axis_s2mm_tready         (s_axis_s2mm_tready_c1          )   // output wire s_axis_s2mm_tready
     );
 
+//***************************************************************************
+// data FIFO instantiation
+//***************************************************************************
+
+    wire    [256        -1 : 0] ddr1_in_data;
+    wire                        ddr1_in_valid;
+    wire                        ddr1_in_ready;
+
+    wire    [256        -1 : 0] ddr2_in_data;
+    wire                        ddr2_in_valid;
+    wire                        ddr2_in_ready;
+
+    output  [DDR_W      -1 : 0] ddr1_out_data;
+    output                      ddr1_out_valid;
+    input                       ddr1_out_ready;
+
+    output  [DDR_W      -1 : 0] ddr2_out_data;
+    output                      ddr2_out_valid;
+    input                       ddr2_out_ready;
+
+    axis_data_fifo_0 mm2s_fifo_0 (
+        .s_axis_aresetn     (c0_datamover_rstn_r    ),
+        .s_axis_aclk        (c0_ddr4_clk            ),
+        .s_axis_tvalid      (m_axis_mm2s_tvalid_c0  ),
+        .s_axis_tready      (m_axis_mm2s_tready_c0  ),
+        .s_axis_tdata       (m_axis_mm2s_tdata_c0   ),
+        .m_axis_aclk        (core_clk               ),
+        .m_axis_aresetn     (core_rst_r             ),
+        .m_axis_tvalid      (ddr1_in_valid          ),
+        .m_axis_tready      (ddr1_in_ready          ),
+        .m_axis_tdata       (ddr1_in_data           ),
+        .axis_data_count    (/*not used*/           ),
+        .axis_wr_data_count (/*not used*/           ),
+        .axis_rd_data_count (/*not used*/           ) 
+    );
+
+    axis_data_fifo_0 mm2s_fifo_1 (
+        .s_axis_aresetn     (c1_datamover_rstn_r    ),
+        .s_axis_aclk        (c1_ddr4_clk            ),
+        .s_axis_tvalid      (m_axis_mm2s_tvalid_c1  ),
+        .s_axis_tready      (m_axis_mm2s_tready_c1  ),
+        .s_axis_tdata       (m_axis_mm2s_tdata_c1   ),
+        .m_axis_aclk        (core_clk               ),
+        .m_axis_aresetn     (core_rst_r             ),
+        .m_axis_tvalid      (ddr2_in_valid          ),
+        .m_axis_tready      (ddr2_in_ready          ),
+        .m_axis_tdata       (ddr2_in_data           ),
+        .axis_data_count    (/*not used*/           ),
+        .axis_wr_data_count (/*not used*/           ),
+        .axis_rd_data_count (/*not used*/           ) 
+    );
+
+    axis_data_fifo_0 s2mm_fifo_0 (
+        .s_axis_aresetn     (core_rst_r             ),
+        .s_axis_aclk        (core_clk               ),
+        .s_axis_tvalid      (ddr1_in_valid          ),
+        .s_axis_tready      (ddr1_in_ready          ),
+        .s_axis_tdata       (ddr1_in_data           ),
+        .m_axis_aresetn     (c0_datamover_rstn_r    ),
+        .m_axis_aclk        (c0_ddr4_clk            ),
+        .m_axis_tvalid      (m_axis_mm2s_tvalid_c0  ),
+        .m_axis_tready      (m_axis_mm2s_tready_c0  ),
+        .m_axis_tdata       (m_axis_mm2s_tdata_c0   ),
+        .axis_data_count    (/*not used*/           ),
+        .axis_wr_data_count (/*not used*/           ),
+        .axis_rd_data_count (/*not used*/           ) 
+    );
+
+    axis_data_fifo_0 s2mm_fifo_1 (
+        .s_axis_aresetn     (core_rst_r             ),
+        .s_axis_aclk        (core_clk               ),
+        .s_axis_tvalid      (ddr2_in_valid          ),
+        .s_axis_tready      (ddr2_in_ready          ),
+        .s_axis_tdata       (ddr2_in_data           ),
+        .m_axis_aresetn     (c1_datamover_rstn_r    ),
+        .m_axis_aclk        (c1_ddr4_clk            ),
+        .m_axis_tvalid      (m_axis_mm2s_tvalid_c1  ),
+        .m_axis_tready      (m_axis_mm2s_tready_c1  ),
+        .m_axis_tdata       (m_axis_mm2s_tdata_c1   ),
+        .axis_data_count    (/*not used*/           ),
+        .axis_wr_data_count (/*not used*/           ),
+        .axis_rd_data_count (/*not used*/           ) 
+    );
+
+//***************************************************************************
+// Core
+//***************************************************************************
+
     reg                 ins_valid;
     wire                ins_ready;
     reg     [64 -1 : 0] ins;
     wire                working;
+    reg                 core_rst_r;
 
-    (* dont_touch = "true" *)
+    always @ (posedge core_clk) begin
+        core_rst_r <= (c0_ddr4_rst | ~c0_init_calib_complete_r | ~c1_init_calib_complete_r);
+    end
+    
     fpga_cnn_train_top top_inst(
 
-        .clk(c0_ddr4_clk),
-        .rst( (c0_ddr4_rst | ~c0_init_calib_complete_r | ~c1_init_calib_complete_r) ),
+        .clk                (core_clk                   ),
+        .rst                (core_rst_r                 ),
 
         .ins_valid          (ins_valid                  ),
         .ins_ready          (ins_ready                  ),

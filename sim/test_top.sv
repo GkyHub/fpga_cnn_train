@@ -1,11 +1,14 @@
-`timescale 1ps/1ps
+`timescale 1ns/1ps
 
 module test_top;
+    parameter CORE_FREQ_MHZ     = 300;
+    parameter real PERIOD_NS    = 1000/CORE_FREQ_MHZ;
   
 //**************************************************************************//
 // Reset Generation
 //**************************************************************************//
-    reg                  sys_rst;
+    reg                 sys_rst;
+    reg                 core_clk;
     
     initial begin
        sys_rst = 1'b0;
@@ -14,6 +17,12 @@ module test_top;
        #205;
        sys_rst = 1'b0;
        #100;
+    end
+
+    initial core_clk <= 1'b1;
+    
+    always #(PERIOD_NS/2) begin
+        core_clk <= ~core_clk;
     end
 
 //**************************************************************************//
@@ -118,7 +127,8 @@ module test_top;
 //**************************************************************************//
 
     fpga_top fpga_top_inst (
-        .sys_rst           (sys_rst),
+        .sys_rst                (sys_rst    ),
+        .core_clk               (core_clk   ),
 
         .c0_data_compare_error  (c0_data_compare_error),
         .c0_init_calib_complete (c0_init_calib_complete),
