@@ -517,6 +517,7 @@ ddr4_0 u_ddr4_c1
   .c0_ddr4_s_axi_rready                (c1_ddr4_s_axi_rready)                                        
 
   );
+  
    always @(posedge c1_ddr4_clk) begin
      c1_ddr4_aresetn <= ~c1_ddr4_rst;
    end
@@ -653,73 +654,60 @@ axi_datamover_0 datamover_c1 (
 
 //1111111111111111111111111111111111111111111111111111111111
 
+    reg                 ins_valid;
+    wire                ins_ready;
+    reg     [64 -1 : 0] ins;
+    wire                working;
 
+    (* dont_touch = "true" *)
+    fpga_cnn_train_top top_inst(
 
-reg[3:0] rst_delay;
-integer int_i;
-always @ (posedge c0_ddr4_clk)begin
-  rst_delay[0] <= (c0_ddr4_rst | ~c0_init_calib_complete_r);
-  for (int_i = 0; int_i < 3;int_i = int_i + 1)begin
-    rst_delay[int_i + 1] <= rst_delay[int_i];
-  end
-end
+        .clk(c0_ddr4_clk),
+        .rst( (c0_ddr4_rst | ~c0_init_calib_complete_r | ~c1_init_calib_complete_r) ),
 
-reg                     ins_valid;
-wire                    ins_ready;
-reg     [64 -1 : 0] ins;
-wire                working;
+        .ins_valid          (ins_valid                  ),
+        .ins_ready          (ins_ready                  ),
+        .ins                (ins                        ),
 
-// uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu
+        .working            (working                    ),
 
-(* dont_touch = "true" *)
-fpga_cnn_train_top top_inst(
+        .ddr1_in_addr       (ddr1_in_addr               ),
+        .ddr1_in_size       (ddr1_in_size               ),
+        .ddr1_in_addr_valid (s_axis_mm2s_cmd_tvalid_c0  ),
+        .ddr1_in_addr_ready (s_axis_mm2s_cmd_tready_c0  ),
 
-    .clk(c0_ddr4_clk),
-    .rst( (c0_ddr4_rst | ~c0_init_calib_complete_r | ~c1_init_calib_complete_r) ),
-    
-    .ins_valid          (ins_valid          ),
-    .ins_ready          (ins_ready          ),
-    .ins                (ins                ),
-    
-    .working            (working            ),
+        .ddr2_in_addr       (ddr2_in_addr               ),
+        .ddr2_in_size       (ddr2_in_size               ),
+        .ddr2_in_addr_valid (s_axis_mm2s_cmd_tvalid_c1  ),
+        .ddr2_in_addr_ready (s_axis_mm2s_cmd_tready_c1  ),
 
-    .ddr1_in_addr(ddr1_in_addr),
-    .ddr1_in_size(ddr1_in_size),
-    .ddr1_in_addr_valid(s_axis_mm2s_cmd_tvalid_c0),
-    .ddr1_in_addr_ready(s_axis_mm2s_cmd_tready_c0),
+        .ddr1_in_data       (m_axis_mm2s_tdata_c0       ),
+        .ddr1_in_valid      (m_axis_mm2s_tvalid_c0      ),
+        .ddr1_in_ready      (m_axis_mm2s_tready_c0      ),
 
-    .ddr2_in_addr(ddr2_in_addr),
-    .ddr2_in_size(ddr2_in_size),
-    .ddr2_in_addr_valid(s_axis_mm2s_cmd_tvalid_c1),
-    .ddr2_in_addr_ready(s_axis_mm2s_cmd_tready_c1),
+        .ddr2_in_data       (m_axis_mm2s_tdata_c1       ),
+        .ddr2_in_valid      (m_axis_mm2s_tvalid_c1      ),
+        .ddr2_in_ready      (m_axis_mm2s_tready_c1      ),
 
-    .ddr1_in_data(m_axis_mm2s_tdata_c0),
-    .ddr1_in_valid(m_axis_mm2s_tvalid_c0),
-    .ddr1_in_ready(m_axis_mm2s_tready_c0),
-    
-    .ddr2_in_data(m_axis_mm2s_tdata_c1),
-    .ddr2_in_valid(m_axis_mm2s_tvalid_c1),
-    .ddr2_in_ready(m_axis_mm2s_tready_c1),
-    
-    .ddr1_out_addr(ddr1_out_addr),
-    .ddr1_out_size(ddr1_out_size),
-    .ddr1_out_addr_valid(s_axis_s2mm_cmd_tvalid_c0),
-    .ddr1_out_addr_ready(s_axis_s2mm_cmd_tready_c0),
+        .ddr1_out_addr      (ddr1_out_addr              ),
+        .ddr1_out_size      (ddr1_out_size              ),
+        .ddr1_out_addr_valid(s_axis_s2mm_cmd_tvalid_c0  ),
+        .ddr1_out_addr_ready(s_axis_s2mm_cmd_tready_c0  ),
 
-    .ddr2_out_addr(ddr2_out_addr),
-    .ddr2_out_size(ddr2_out_size),
-    .ddr2_out_addr_valid(s_axis_s2mm_cmd_tvalid_c1),
-    .ddr2_out_addr_ready(s_axis_s2mm_cmd_tready_c1),
+        .ddr2_out_addr      (ddr2_out_addr              ),
+        .ddr2_out_size      (ddr2_out_size              ),
+        .ddr2_out_addr_valid(s_axis_s2mm_cmd_tvalid_c1  ),
+        .ddr2_out_addr_ready(s_axis_s2mm_cmd_tready_c1  ),
 
-    .ddr1_out_data(s_axis_s2mm_tdata_c0),
-    .ddr1_out_valid(s_axis_s2mm_tvalid_c0),
-    .ddr1_out_ready(s_axis_s2mm_tready_c0),
-    
-    .ddr2_out_data(s_axis_s2mm_tdata_c1),
-    .ddr2_out_valid(s_axis_s2mm_tvalid_c1),
-    .ddr2_out_ready(s_axis_s2mm_tready_c1)
+        .ddr1_out_data      (s_axis_s2mm_tdata_c0       ),
+        .ddr1_out_valid     (s_axis_s2mm_tvalid_c0      ),
+        .ddr1_out_ready     (s_axis_s2mm_tready_c0      ),
 
-);
+        .ddr2_out_data      (s_axis_s2mm_tdata_c1       ),
+        .ddr2_out_valid     (s_axis_s2mm_tvalid_c1      ),
+        .ddr2_out_ready     (s_axis_s2mm_tready_c1      )
+
+    );
 /*
     initial begin
         ins_valid   <= 1'b0;
