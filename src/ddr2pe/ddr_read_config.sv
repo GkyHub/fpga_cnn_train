@@ -1,5 +1,7 @@
 import GLOBAL_PARAM::DDR_ADDR_W;
 import GLOBAL_PARAM::BURST_W;
+import GLOBAL_PARAM::DATA_W;
+import GLOBAL_PARAM::TAIL_W;
 import INS_CONST::*;
 
 module ddr_read_config(
@@ -36,6 +38,8 @@ module ddr_read_config(
     output  [DDR_ADDR_W -1 : 0] ddr2_step,
     output  [BURST_W    -1 : 0] ddr2_burst_num
     );
+
+    localparam TD_RATE = TAIL_W / DATA_W;
 
     // decoding logic
     wire    [3 : 0] opcode  = ins[61:58];
@@ -94,8 +98,8 @@ module ddr_read_config(
             else if (opcode[3:2] == 2'b00) begin
                 ddr1_conf_valid_r   <= 1'b1;
                 ddr1_st_addr_r      <= st_addr;
-                ddr1_burst_r        <= ((pix_num + 1) * in_ch_seg_r) << 5;
-                ddr1_step_r         <= ((pix_num + 1) * in_img_width_r) << 5;
+                ddr1_burst_r        <= ((pix_num + 1) * in_ch_seg) << 5;
+                ddr1_step_r         <= ((pix_num + 1) * in_img_width) << 5;
                 ddr1_burst_num_r    <= row_num;
             end
             else begin
@@ -119,8 +123,8 @@ module ddr_read_config(
             if (opcode == RD_OP_G) begin
                 ddr2_conf_valid_r   <= 1'b1;
                 ddr2_st_addr_r      <= st_addr;
-                ddr2_burst_r        <= ((pix_num + 1) * out_ch_seg_r) << 5;
-                ddr2_step_r         <= ((pix_num + 1) * out_img_width_r) << 5;
+                ddr2_burst_r        <= ((pix_num + 1) * out_ch_seg) << 5;
+                ddr2_step_r         <= ((pix_num + 1) * out_img_width) << 5;
                 ddr2_burst_num_r    <= row_num;
             end
             else if (opcode[3:2] == 2'b01) begin

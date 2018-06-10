@@ -156,7 +156,7 @@ module ddr2pe#(
         .in_img_width   (in_img_width   ),
         .out_img_width  (out_img_width  ),
         .in_ch_seg      (in_ch_seg      ),
-        .out_ch_set     (out_ch_seg     ),
+        .out_ch_seg     (out_ch_seg     ),
     
         .ins_valid      (ins_valid      ),
         .ins_ready      (ins_ready      ),
@@ -196,7 +196,7 @@ module ddr2pe#(
     );
 
     rx_config#(
-        .PE_NUM (PE_NUM ),
+        .PE_NUM (PE_NUM )
     ) rx_config_inst (
         .clk                    (clk                    ),
         .rst                    (rst                    ),
