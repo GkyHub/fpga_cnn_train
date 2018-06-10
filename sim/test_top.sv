@@ -1,8 +1,8 @@
 `timescale 1ns/1ps
 
 module test_top;
-    parameter CORE_FREQ_MHZ     = 300;
-    parameter real PERIOD_NS    = 1000/CORE_FREQ_MHZ;
+    parameter real CORE_FREQ_MHZ    = 300.0;
+    parameter real PERIOD_NS        = 1000.0/CORE_FREQ_MHZ;
   
 //**************************************************************************//
 // Reset Generation
@@ -14,13 +14,13 @@ module test_top;
        sys_rst = 1'b0;
        #200
        sys_rst = 1'b1;
-       #205;
+       #400;
        sys_rst = 1'b0;
        #100;
     end
 
     initial core_clk <= 1'b1;
-    
+
     always #(PERIOD_NS/2) begin
         core_clk <= ~core_clk;
     end
