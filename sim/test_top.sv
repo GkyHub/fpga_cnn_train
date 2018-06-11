@@ -181,7 +181,7 @@ module test_top;
     initial begin
         ins_valid   <= 1'b0;
         ins         <= '0;
-        wait(core_rst_r);
+        wait(sys_rst);
         #500
         @(posedge core_clk);
         

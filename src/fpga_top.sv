@@ -93,31 +93,31 @@ module fpga_top #(
 // DDR4 0 MIG instantiation
 //***************************************************************************
 
-    wire  [APP_ADDR_WIDTH -1:0] c0_ddr4_app_addr;
-    wire  [2:0]                 c0_ddr4_app_cmd;
-    wire                        c0_ddr4_app_en;
-    wire  [APP_DATA_WIDTH -1:0] c0_ddr4_app_wdf_data;
-    wire                        c0_ddr4_app_wdf_end;
-    wire  [APP_MASK_WIDTH -1:0] c0_ddr4_app_wdf_mask;
-    wire                        c0_ddr4_app_wdf_wren;
-    wire  [APP_DATA_WIDTH -1:0] c0_ddr4_app_rd_data;
-    wire                        c0_ddr4_app_rd_data_end;
-    wire                        c0_ddr4_app_rd_data_valid;
-    wire                        c0_ddr4_app_rdy;
-    wire                        c0_ddr4_app_wdf_rdy;
+    // wire  [APP_ADDR_WIDTH -1:0] c0_ddr4_app_addr;
+    // wire  [2:0]                 c0_ddr4_app_cmd;
+    // wire                        c0_ddr4_app_en;
+    // wire  [APP_DATA_WIDTH -1:0] c0_ddr4_app_wdf_data;
+    // wire                        c0_ddr4_app_wdf_end;
+    // wire  [APP_MASK_WIDTH -1:0] c0_ddr4_app_wdf_mask;
+    // wire                        c0_ddr4_app_wdf_wren;
+    // wire  [APP_DATA_WIDTH -1:0] c0_ddr4_app_rd_data;
+    // wire                        c0_ddr4_app_rd_data_end;
+    // wire                        c0_ddr4_app_rd_data_valid;
+    // wire                        c0_ddr4_app_rdy;
+    // wire                        c0_ddr4_app_wdf_rdy;
     wire                        c0_ddr4_clk;
     wire                        c0_ddr4_rst;
-    wire                        c0_wr_rd_complete;
+    // wire                        c0_wr_rd_complete;
 
 
     reg                         c0_ddr4_aresetn;
-    wire                        c0_ddr4_data_msmatch_err;
-    wire                        c0_ddr4_write_err;
-    wire                        c0_ddr4_read_err;
-    wire                        c0_ddr4_test_cmptd;
-    wire                        c0_ddr4_write_cmptd;
-    wire                        c0_ddr4_read_cmptd;
-    wire                        c0_ddr4_cmptd_one_wr_rd;
+    // wire                        c0_ddr4_data_msmatch_err;
+    // wire                        c0_ddr4_write_err;
+    // wire                        c0_ddr4_read_err;
+    // wire                        c0_ddr4_test_cmptd;
+    // wire                        c0_ddr4_write_cmptd;
+    // wire                        c0_ddr4_read_cmptd;
+    // wire                        c0_ddr4_cmptd_one_wr_rd;
 
     // Slave Interface Write Address Ports
     wire [7:0]                  c0_ddr4_s_axi_awid;
@@ -157,15 +157,16 @@ module fpga_top #(
     wire                        c0_ddr4_s_axi_rlast;
     wire                        c0_ddr4_s_axi_rvalid;
 
-    wire                        c0_ddr4_cmp_data_valid;
-    wire [255:0]                c0_ddr4_cmp_data;     // Compare data
-    wire [255:0]                c0_ddr4_rdata_cmp;      // Read data
+    // wire                        c0_ddr4_cmp_data_valid;
+    // wire [255:0]                c0_ddr4_cmp_data;     // Compare data
+    // wire [255:0]                c0_ddr4_rdata_cmp;      // Read data
 
-    wire                        c0_ddr4_dbg_wr_sts_vld;
-    wire [DBG_WR_STS_WIDTH-1:0] c0_ddr4_dbg_wr_sts;
-    wire                        c0_ddr4_dbg_rd_sts_vld;
-    wire [DBG_RD_STS_WIDTH-1:0] c0_ddr4_dbg_rd_sts;
-    assign c0_data_compare_error = c0_ddr4_data_msmatch_err | c0_ddr4_write_err | c0_ddr4_read_err;
+    // wire                        c0_ddr4_dbg_wr_sts_vld;
+    // wire [DBG_WR_STS_WIDTH-1:0] c0_ddr4_dbg_wr_sts;
+    // wire                        c0_ddr4_dbg_rd_sts_vld;
+    // wire [DBG_RD_STS_WIDTH-1:0] c0_ddr4_dbg_rd_sts;
+    // assign c0_data_compare_error = c0_ddr4_data_msmatch_err | c0_ddr4_write_err | c0_ddr4_read_err;
+    assign  c0_data_compare_error = 1'b0;
 
   
     wire c0_ddr4_reset_n_int;
@@ -301,8 +302,8 @@ module fpga_top #(
         .s_axis_mm2s_cmd_tvalid     (s_axis_mm2s_cmd_tvalid_c0      ),  // input wire s_axis_mm2s_cmd_tvalid
         .s_axis_mm2s_cmd_tready     (s_axis_mm2s_cmd_tready_c0      ),  // output wire s_axis_mm2s_cmd_tready
         .s_axis_mm2s_cmd_tdata      (s_axis_mm2s_cmd_tdata_c0       ),  // input wire [71 : 0] s_axis_mm2s_cmd_tdata
-        .m_axis_mm2s_sts_tvalid     (m_axis_mm2s_sts_tvalid_c0      ),  // output wire m_axis_mm2s_sts_tvalid
-        .m_axis_mm2s_sts_tready     (m_axis_mm2s_sts_tready_c0      ),  // input wire m_axis_mm2s_sts_tready
+        .m_axis_mm2s_sts_tvalid     (/* not used */                 ),  // output wire m_axis_mm2s_sts_tvalid
+        .m_axis_mm2s_sts_tready     (/* not used */                 ),  // input wire m_axis_mm2s_sts_tready
         .m_axis_mm2s_sts_tdata      (/* not used */                 ),  // output wire [7 : 0] m_axis_mm2s_sts_tdata
         .m_axis_mm2s_sts_tkeep      (m_axis_mm2s_sts_tkeep_c0       ),  // output wire [0 : 0] m_axis_mm2s_sts_tkeep
         .m_axis_mm2s_sts_tlast      (m_axis_mm2s_sts_tlast_c0       ),  // output wire m_axis_mm2s_sts_tlast
@@ -336,8 +337,8 @@ module fpga_top #(
         .s_axis_s2mm_cmd_tvalid     (s_axis_s2mm_cmd_tvalid_c0      ),  // input wire s_axis_s2mm_cmd_tvalid
         .s_axis_s2mm_cmd_tready     (s_axis_s2mm_cmd_tready_c0      ),  // output wire s_axis_s2mm_cmd_tready
         .s_axis_s2mm_cmd_tdata      (s_axis_s2mm_cmd_tdata_c0       ),  // input wire [71 : 0] s_axis_s2mm_cmd_tdata
-        .m_axis_s2mm_sts_tvalid     (m_axis_s2mm_sts_tvalid_c0      ),  // output wire m_axis_s2mm_sts_tvalid
-        .m_axis_s2mm_sts_tready     (m_axis_s2mm_sts_tready_c0      ),  // input wire m_axis_s2mm_sts_tready
+        .m_axis_s2mm_sts_tvalid     (/* not used */                 ),  // output wire m_axis_s2mm_sts_tvalid
+        .m_axis_s2mm_sts_tready     (/* not used */                 ),  // input wire m_axis_s2mm_sts_tready
         .m_axis_s2mm_sts_tdata      (/* not used */                 ),  // output wire [7 : 0] m_axis_s2mm_sts_tdata
         .m_axis_s2mm_sts_tkeep      (m_axis_s2mm_sts_tkeep_c0       ),  // output wire [0 : 0] m_axis_s2mm_sts_tkeep
         .m_axis_s2mm_sts_tlast      (m_axis_s2mm_sts_tlast_c0       ),  // output wire m_axis_s2mm_sts_tlast
@@ -371,31 +372,31 @@ module fpga_top #(
 // DDR4 1 MIG instantiation
 //***************************************************************************
 
-    wire  [APP_ADDR_WIDTH -1:0] c1_ddr4_app_addr;
-    wire  [2:0]                 c1_ddr4_app_cmd;
-    wire                        c1_ddr4_app_en;
-    wire  [APP_DATA_WIDTH -1:0] c1_ddr4_app_wdf_data;
-    wire                        c1_ddr4_app_wdf_end;
-    wire  [APP_MASK_WIDTH -1:0] c1_ddr4_app_wdf_mask;
-    wire                        c1_ddr4_app_wdf_wren;
-    wire  [APP_DATA_WIDTH -1:0] c1_ddr4_app_rd_data;
-    wire                        c1_ddr4_app_rd_data_end;
-    wire                        c1_ddr4_app_rd_data_valid;
-    wire                        c1_ddr4_app_rdy;
-    wire                        c1_ddr4_app_wdf_rdy;
+    // wire  [APP_ADDR_WIDTH -1:0] c1_ddr4_app_addr;
+    // wire  [2:0]                 c1_ddr4_app_cmd;
+    // wire                        c1_ddr4_app_en;
+    // wire  [APP_DATA_WIDTH -1:0] c1_ddr4_app_wdf_data;
+    // wire                        c1_ddr4_app_wdf_end;
+    // wire  [APP_MASK_WIDTH -1:0] c1_ddr4_app_wdf_mask;
+    // wire                        c1_ddr4_app_wdf_wren;
+    // wire  [APP_DATA_WIDTH -1:0] c1_ddr4_app_rd_data;
+    // wire                        c1_ddr4_app_rd_data_end;
+    // wire                        c1_ddr4_app_rd_data_valid;
+    // wire                        c1_ddr4_app_rdy;
+    // wire                        c1_ddr4_app_wdf_rdy;
     wire                        c1_ddr4_clk;
     wire                        c1_ddr4_rst;
-    wire                        c1_wr_rd_complete;
+    // wire                        c1_wr_rd_complete;
 
 
     reg                         c1_ddr4_aresetn;
-    wire                        c1_ddr4_data_msmatch_err;
-    wire                        c1_ddr4_write_err;
-    wire                        c1_ddr4_read_err;
-    wire                        c1_ddr4_test_cmptd;
-    wire                        c1_ddr4_write_cmptd;
-    wire                        c1_ddr4_read_cmptd;
-    wire                        c1_ddr4_cmptd_one_wr_rd;
+    // wire                        c1_ddr4_data_msmatch_err;
+    // wire                        c1_ddr4_write_err;
+    // wire                        c1_ddr4_read_err;
+    // wire                        c1_ddr4_test_cmptd;
+    // wire                        c1_ddr4_write_cmptd;
+    // wire                        c1_ddr4_read_cmptd;
+    // wire                        c1_ddr4_cmptd_one_wr_rd;
 
     // Slave Interface Write Address Ports
     wire [7:0]                  c1_ddr4_s_axi_awid;
@@ -435,15 +436,16 @@ module fpga_top #(
     wire                        c1_ddr4_s_axi_rlast;
     wire                        c1_ddr4_s_axi_rvalid;
 
-    wire                        c1_ddr4_cmp_data_valid;
-    wire [255:0]                c1_ddr4_cmp_data;     // Compare data
-    wire [255:0]                c1_ddr4_rdata_cmp;      // Read data
+    // wire                        c1_ddr4_cmp_data_valid;
+    // wire [255:0]                c1_ddr4_cmp_data;     // Compare data
+    // wire [255:0]                c1_ddr4_rdata_cmp;      // Read data
 
-    wire                        c1_ddr4_dbg_wr_sts_vld;
-    wire [DBG_WR_STS_WIDTH-1:0] c1_ddr4_dbg_wr_sts;
-    wire                        c1_ddr4_dbg_rd_sts_vld;
-    wire [DBG_RD_STS_WIDTH-1:0] c1_ddr4_dbg_rd_sts;
-    assign c1_data_compare_error = c1_ddr4_data_msmatch_err | c1_ddr4_write_err | c1_ddr4_read_err;
+    // wire                        c1_ddr4_dbg_wr_sts_vld;
+    // wire [DBG_WR_STS_WIDTH-1:0] c1_ddr4_dbg_wr_sts;
+    // wire                        c1_ddr4_dbg_rd_sts_vld;
+    // wire [DBG_RD_STS_WIDTH-1:0] c1_ddr4_dbg_rd_sts;
+    // assign c1_data_compare_error = c1_ddr4_data_msmatch_err | c1_ddr4_write_err | c1_ddr4_read_err;
+    assign  c1_data_compare_error = 1'b0;
 
   
     wire c1_ddr4_reset_n_int;
@@ -578,8 +580,8 @@ module fpga_top #(
         .s_axis_mm2s_cmd_tvalid     (s_axis_mm2s_cmd_tvalid_c1      ),  // input wire s_axis_mm2s_cmd_tvalid
         .s_axis_mm2s_cmd_tready     (s_axis_mm2s_cmd_tready_c1      ),  // output wire s_axis_mm2s_cmd_tready
         .s_axis_mm2s_cmd_tdata      (s_axis_mm2s_cmd_tdata_c1       ),  // input wire [71 : 0] s_axis_mm2s_cmd_tdata
-        .m_axis_mm2s_sts_tvalid     (m_axis_mm2s_sts_tvalid_c1      ),  // output wire m_axis_mm2s_sts_tvalid
-        .m_axis_mm2s_sts_tready     (m_axis_mm2s_sts_tready_c1      ),  // input wire m_axis_mm2s_sts_tready
+        .m_axis_mm2s_sts_tvalid     (/* not used */                 ),  // output wire m_axis_mm2s_sts_tvalid
+        .m_axis_mm2s_sts_tready     (/* not used */                 ),  // input wire m_axis_mm2s_sts_tready
         .m_axis_mm2s_sts_tdata      (/* not used */                 ),  // output wire [7 : 0] m_axis_mm2s_sts_tdata
         .m_axis_mm2s_sts_tkeep      (m_axis_mm2s_sts_tkeep_c1       ),  // output wire [0 : 0] m_axis_mm2s_sts_tkeep
         .m_axis_mm2s_sts_tlast      (m_axis_mm2s_sts_tlast_c1       ),  // output wire m_axis_mm2s_sts_tlast
@@ -613,8 +615,8 @@ module fpga_top #(
         .s_axis_s2mm_cmd_tvalid     (s_axis_s2mm_cmd_tvalid_c1      ),  // input wire s_axis_s2mm_cmd_tvalid
         .s_axis_s2mm_cmd_tready     (s_axis_s2mm_cmd_tready_c1      ),  // output wire s_axis_s2mm_cmd_tready
         .s_axis_s2mm_cmd_tdata      (s_axis_s2mm_cmd_tdata_c1       ),  // input wire [71 : 0] s_axis_s2mm_cmd_tdata
-        .m_axis_s2mm_sts_tvalid     (m_axis_s2mm_sts_tvalid_c1      ),  // output wire m_axis_s2mm_sts_tvalid
-        .m_axis_s2mm_sts_tready     (m_axis_s2mm_sts_tready_c1      ),  // input wire m_axis_s2mm_sts_tready
+        .m_axis_s2mm_sts_tvalid     (/* not used */                 ),  // output wire m_axis_s2mm_sts_tvalid
+        .m_axis_s2mm_sts_tready     (/* not used */                 ),  // input wire m_axis_s2mm_sts_tready
         .m_axis_s2mm_sts_tdata      (/* not used */                 ),  // output wire [7 : 0] m_axis_s2mm_sts_tdata
         .m_axis_s2mm_sts_tkeep      (m_axis_s2mm_sts_tkeep_c1       ),  // output wire [0 : 0] m_axis_s2mm_sts_tkeep
         .m_axis_s2mm_sts_tlast      (m_axis_s2mm_sts_tlast_c1       ),  // output wire m_axis_s2mm_sts_tlast
@@ -698,14 +700,14 @@ module fpga_top #(
     axis_data_fifo_0 s2mm_fifo_0 (
         .s_axis_aresetn     (core_rst_r             ),
         .s_axis_aclk        (core_clk               ),
-        .s_axis_tvalid      (ddr1_in_valid          ),
-        .s_axis_tready      (ddr1_in_ready          ),
-        .s_axis_tdata       (ddr1_in_data           ),
+        .s_axis_tvalid      (ddr1_out_valid         ),
+        .s_axis_tready      (ddr1_out_ready         ),
+        .s_axis_tdata       (ddr1_out_data          ),
         .m_axis_aresetn     (c0_datamover_rstn_r    ),
         .m_axis_aclk        (c0_ddr4_clk            ),
-        .m_axis_tvalid      (s_axis_mm2s_tvalid_c0  ),
-        .m_axis_tready      (s_axis_mm2s_tready_c0  ),
-        .m_axis_tdata       (s_axis_mm2s_tdata_c0   ),
+        .m_axis_tvalid      (s_axis_s2mm_tvalid_c0  ),
+        .m_axis_tready      (s_axis_s2mm_tready_c0  ),
+        .m_axis_tdata       (s_axis_s2mm_tdata_c0   ),
         .axis_data_count    (/*not used*/           ),
         .axis_wr_data_count (/*not used*/           ),
         .axis_rd_data_count (/*not used*/           ) 
@@ -714,14 +716,14 @@ module fpga_top #(
     axis_data_fifo_0 s2mm_fifo_1 (
         .s_axis_aresetn     (core_rst_r             ),
         .s_axis_aclk        (core_clk               ),
-        .s_axis_tvalid      (ddr2_in_valid          ),
-        .s_axis_tready      (ddr2_in_ready          ),
-        .s_axis_tdata       (ddr2_in_data           ),
+        .s_axis_tvalid      (ddr2_out_valid         ),
+        .s_axis_tready      (ddr2_out_ready         ),
+        .s_axis_tdata       (ddr2_out_data          ),
         .m_axis_aresetn     (c1_datamover_rstn_r    ),
         .m_axis_aclk        (c1_ddr4_clk            ),
-        .m_axis_tvalid      (s_axis_mm2s_tvalid_c1  ),
-        .m_axis_tready      (s_axis_mm2s_tready_c1  ),
-        .m_axis_tdata       (s_axis_mm2s_tdata_c1   ),
+        .m_axis_tvalid      (s_axis_s2mm_tvalid_c1  ),
+        .m_axis_tready      (s_axis_s2mm_tready_c1  ),
+        .m_axis_tdata       (s_axis_s2mm_tdata_c1   ),
         .axis_data_count    (/*not used*/           ),
         .axis_wr_data_count (/*not used*/           ),
         .axis_rd_data_count (/*not used*/           ) 
