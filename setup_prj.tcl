@@ -24,6 +24,9 @@ add_files -fileset sim_1 ./sim
 # set_property top $SIM_TOP $VIVADO_PRJ
 update_compile_order -fileset sim_1
 
+# add constraint files
+add_files -fileset constrs_1 ./const
+
 # add ip
 # source ./add_ip.tcl
 source ./create_ip_repo.tcl
