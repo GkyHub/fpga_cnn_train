@@ -12,7 +12,7 @@ module test_top;
     
     initial begin
        sys_rst = 1'b0;
-       #200
+       #200;
        sys_rst = 1'b1;
        #400;
        sys_rst = 1'b0;
@@ -127,45 +127,48 @@ module test_top;
 //**************************************************************************//
 
     fpga_top fpga_top_inst (
-        .sys_rst                (sys_rst    ),
-        .core_clk               (core_clk   ),
+        .sys_rst                (sys_rst                ),
+        .core_clk               (core_clk               ),
 
-        .c0_data_compare_error  (c0_data_compare_error),
-        .c0_init_calib_complete (c0_init_calib_complete),
-        .c0_sys_clk_p           (c0_sys_clk_p),
-        .c0_sys_clk_n           (c0_sys_clk_n),
+        .c0_data_compare_error  (c0_data_compare_error  ),
+        .c0_init_calib_complete (c0_init_calib_complete ),
+        .c0_sys_clk_p           (c0_sys_clk_p           ),
+        .c0_sys_clk_n           (c0_sys_clk_n           ),
 
-        .c0_ddr4_act_n          (c0_ddr4_act_n),
-        .c0_ddr4_adr            (c0_ddr4_adr),
-        .c0_ddr4_ba             (c0_ddr4_ba),
-        .c0_ddr4_bg             (c0_ddr4_bg),
-        .c0_ddr4_cke            (c0_ddr4_cke),
-        .c0_ddr4_odt            (c0_ddr4_odt),
-        .c0_ddr4_cs_n           (c0_ddr4_cs_n),
-        .c0_ddr4_ck_t           (c0_ddr4_ck_t_int),
-        .c0_ddr4_ck_c           (c0_ddr4_ck_c_int),
-        .c0_ddr4_reset_n        (c0_ddr4_reset_n),
-        .c0_ddr4_dm_dbi_n       (c0_ddr4_dm_dbi_n),
+        .c0_ddr4_act_n          (c0_ddr4_act_n          ),
+        .c0_ddr4_adr            (c0_ddr4_adr            ),
+        .c0_ddr4_ba             (c0_ddr4_ba             ),
+        .c0_ddr4_bg             (c0_ddr4_bg             ),
+        .c0_ddr4_cke            (c0_ddr4_cke            ),
+        .c0_ddr4_odt            (c0_ddr4_odt            ),
+        .c0_ddr4_cs_n           (c0_ddr4_cs_n           ),
+        .c0_ddr4_ck_t           (c0_ddr4_ck_t           ),
+        .c0_ddr4_ck_c           (c0_ddr4_ck_c           ),
+        .c0_ddr4_reset_n        (c0_ddr4_reset_n        ),
+        .c0_ddr4_dm_dbi_n       (c0_ddr4_dm_dbi_n       ),
+        .c0_ddr4_dq             (c0_ddr4_dq             ),
+        .c0_ddr4_dqs_c          (c0_ddr4_dqs_c          ),
+        .c0_ddr4_dqs_t          (c0_ddr4_dqs_t          ),
 
-        .c1_data_compare_error  (c1_data_compare_error),
-        .c1_init_calib_complete (c1_init_calib_complete),
-        .c1_sys_clk_p           (c1_sys_clk_p),
-        .c1_sys_clk_n           (c1_sys_clk_n),
+        .c1_data_compare_error  (c1_data_compare_error  ),
+        .c1_init_calib_complete (c1_init_calib_complete ),
+        .c1_sys_clk_p           (c1_sys_clk_p           ),
+        .c1_sys_clk_n           (c1_sys_clk_n           ),
 
-        .c1_ddr4_act_n          (c1_ddr4_act_n),
-        .c1_ddr4_adr            (c1_ddr4_adr),
-        .c1_ddr4_ba             (c1_ddr4_ba),
-        .c1_ddr4_bg             (c1_ddr4_bg),
-        .c1_ddr4_cke            (c1_ddr4_cke),
-        .c1_ddr4_odt            (c1_ddr4_odt),
-        .c1_ddr4_cs_n           (c1_ddr4_cs_n),
-        .c1_ddr4_ck_t           (c1_ddr4_ck_t_int),
-        .c1_ddr4_ck_c           (c1_ddr4_ck_c_int),
-        .c1_ddr4_reset_n        (c1_ddr4_reset_n),
-        .c1_ddr4_dm_dbi_n       (c1_ddr4_dm_dbi_n),
-        .c1_ddr4_dq             (c1_ddr4_dq),
-        .c1_ddr4_dqs_c          (c1_ddr4_dqs_c),
-        .c1_ddr4_dqs_t          (c1_ddr4_dqs_t)
+        .c1_ddr4_act_n          (c1_ddr4_act_n          ),
+        .c1_ddr4_adr            (c1_ddr4_adr            ),
+        .c1_ddr4_ba             (c1_ddr4_ba             ),
+        .c1_ddr4_bg             (c1_ddr4_bg             ),
+        .c1_ddr4_cke            (c1_ddr4_cke            ),
+        .c1_ddr4_odt            (c1_ddr4_odt            ),
+        .c1_ddr4_cs_n           (c1_ddr4_cs_n           ),
+        .c1_ddr4_ck_t           (c1_ddr4_ck_t           ),
+        .c1_ddr4_ck_c           (c1_ddr4_ck_c           ),
+        .c1_ddr4_reset_n        (c1_ddr4_reset_n        ),
+        .c1_ddr4_dm_dbi_n       (c1_ddr4_dm_dbi_n       ),
+        .c1_ddr4_dq             (c1_ddr4_dq             ),
+        .c1_ddr4_dqs_c          (c1_ddr4_dqs_c          ),
+        .c1_ddr4_dqs_t          (c1_ddr4_dqs_t          )
       );
   
 endmodule

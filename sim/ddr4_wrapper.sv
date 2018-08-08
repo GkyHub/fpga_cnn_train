@@ -85,11 +85,11 @@ module ddr4_wrapper#(
     reg     [1             : 0] ddr4_ba_sdram[1:0];
     reg     [0             : 0] ddr4_bg_sdram[1:0];
             
-    wire    [0             : 0] ddr4_ck_t_int;
-    wire    [0             : 0] ddr4_ck_c_int;
+//    wire    [0             : 0] ddr4_ck_t_int;
+//    wire    [0             : 0] ddr4_ck_c_int;
 
-    wire            ddr4_ck_t;
-    wire            ddr4_ck_c;
+//    wire            ddr4_ck_t;
+//    wire            ddr4_ck_c;
 
     wire            ddr4_reset_n;
 
@@ -110,8 +110,8 @@ module ddr4_wrapper#(
     assign sys_clk_p = sys_clk_i;
     assign sys_clk_n = ~sys_clk_i;
 
-    assign ddr4_ck_t = ddr4_ck_t_int[0];
-    assign ddr4_ck_c = ddr4_ck_c_int[0];
+//    assign ddr4_ck_t = ddr4_ck_t_int[0];
+//    assign ddr4_ck_c = ddr4_ck_c_int[0];
 
     always @( * ) begin
         ddr4_adr_sdram[0]   <=  ddr4_adr;

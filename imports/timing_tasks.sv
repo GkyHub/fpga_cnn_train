@@ -26,7 +26,8 @@ typedef enum {
 integer tt_timesets [0:NUM_TS-1][0:NUM_TIMESPEC-1];
 integer tCK;
 integer tOffset;
-int max_tCK, min_tCK;
+int max_tCK;
+int min_tCK;
 
 initial begin
     LoadTiming();
