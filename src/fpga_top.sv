@@ -160,7 +160,7 @@ module fpga_top #(
     wire [DBG_WR_STS_WIDTH-1:0] c0_ddr4_dbg_wr_sts;
     wire                        c0_ddr4_dbg_rd_sts_vld;
     wire [DBG_RD_STS_WIDTH-1:0] c0_ddr4_dbg_rd_sts;
-    assign c0_data_compare_error = c0_ddr4_data_msmatch_err | c0_ddr4_write_err | c0_ddr4_read_err;
+    assign c0_data_compare_error = c0_ddr4_data_msmatch_err | c0_ddr4_write_err | c0_ddr4_read_err ;//| mm2s_err_c0 | s2mm_err_c0;
 
   
     wire c0_ddr4_reset_n_int;
@@ -286,6 +286,8 @@ module fpga_top #(
     assign s_axis_s2mm_cmd_tdata_c0 [31:24] = 0;
     assign s_axis_s2mm_cmd_tdata_c0 [63:32] = ddr1_out_addr;
     assign s_axis_s2mm_cmd_tdata_c0 [71:64] = 0;
+    assign m_axis_mm2s_sts_tready_c0 =1;        // sts ports are unused but input must be assign
+    assign m_axis_s2mm_sts_tready_c0 =1;
     wire mm2s_err_c0;
     wire s2mm_err_c0;
 
@@ -441,8 +443,7 @@ module fpga_top #(
     wire [DBG_WR_STS_WIDTH-1:0] c1_ddr4_dbg_wr_sts;
     wire                        c1_ddr4_dbg_rd_sts_vld;
     wire [DBG_RD_STS_WIDTH-1:0] c1_ddr4_dbg_rd_sts;
-    assign c1_data_compare_error = c1_ddr4_data_msmatch_err | c1_ddr4_write_err | c1_ddr4_read_err;
-
+    assign c1_data_compare_error = c1_ddr4_data_msmatch_err | c1_ddr4_write_err | c1_ddr4_read_err ;//| mm2s_err_c1 | s2mm_err_c1;
   
     wire c1_ddr4_reset_n_int;
     assign c1_ddr4_reset_n = c1_ddr4_reset_n_int;
@@ -566,6 +567,8 @@ module fpga_top #(
     assign s_axis_s2mm_cmd_tdata_c1 [31:24] = 0;
     assign s_axis_s2mm_cmd_tdata_c1 [63:32] = ddr2_out_addr;
     assign s_axis_s2mm_cmd_tdata_c1 [71:64] = 0;
+    assign m_axis_mm2s_sts_tready_c1 =1;   // sts ports are unused but input must be assign
+    assign m_axis_s2mm_sts_tready_c1 =1;
     wire mm2s_err_c1;
     wire s2mm_err_c1;
 
