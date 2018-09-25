@@ -570,7 +570,7 @@ module fpga_top #(
     axi_datamover_0 datamover_c1 (
         .m_axi_mm2s_aclk            (c1_ddr4_clk                ),
         .m_axi_mm2s_aresetn         (c1_datamover_rstn_r        ),
-        .mm2s_err                   (mm2s_err                   ),
+        .mm2s_err                   (/* not used */                    ),
 
         .m_axis_mm2s_cmdsts_aclk    (core_clk                   ),  // input wire m_axis_mm2s_cmdsts_aclk
         .m_axis_mm2s_cmdsts_aresetn (~core_rst_r                 ),  // input wire m_axis_mm2s_cmdsts_aresetn
@@ -605,7 +605,7 @@ module fpga_top #(
 
         .m_axi_s2mm_aclk            (c1_ddr4_clk                ),  // input wire m_axi_s2mm_aclk
         .m_axi_s2mm_aresetn         (c1_datamover_rstn_r        ),  // input wire m_axi_s2mm_aresetn
-        .s2mm_err                   (s2mm_err                   ),  // output wire s2mm_err
+        .s2mm_err                   (/* not used */                   ),  // output wire s2mm_err
 
         .m_axis_s2mm_cmdsts_awclk   (core_clk                   ),  // input wire m_axis_s2mm_cmdsts_awclk
         .m_axis_s2mm_cmdsts_aresetn (~core_rst_r                 ),  // input wire m_axis_s2mm_cmdsts_aresetn

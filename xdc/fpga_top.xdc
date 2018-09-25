@@ -144,7 +144,7 @@ set_property IOSTANDARD  POD12_DCI [get_ports {c0_ddr4_dm_dbi_n[0]}] ;# Bank  44
 set_property PACKAGE_PIN AL34      [get_ports {c0_ddr4_adr[14]}] ;# Bank  45 VCCO - VCC1V2_FPGA - IO_L24P_T3U_N10_45
 set_property IOSTANDARD  SSTL12_DCI [get_ports {c0_ddr4_adr[14]}] ;# Bank  45 VCCO - VCC1V2_FPGA - IO_L24P_T3U_N10_45
 set_property PACKAGE_PIN AM34      [get_ports {c0_ddr4_adr[0]}] ;# Bank  45 VCCO - VCC1V2_FPGA - IO_L24N_T3U_N11_45
-set_property IOSTANDARD  SSTL12_DCU [get_ports {c0_ddr4_adr[0]}] ;# Bank  45 VCCO - VCC1V2_FPGA - IO_L24N_T3U_N11_45
+set_property IOSTANDARD  SSTL12_DCI [get_ports {c0_ddr4_adr[0]}] ;# Bank  45 VCCO - VCC1V2_FPGA - IO_L24N_T3U_N11_45
 set_property PACKAGE_PIN AL33      [get_ports {c0_ddr4_adr[2]}] ;# Bank  45 VCCO - VCC1V2_FPGA - IO_T3U_N12_45
 set_property IOSTANDARD  SSTL12_DCI [get_ports {c0_ddr4_adr[2]}] ;# Bank  45 VCCO - VCC1V2_FPGA - IO_T3U_N12_45
 set_property PACKAGE_PIN AL32      [get_ports {c0_ddr4_adr[8]}] ;# Bank  45 VCCO - VCC1V2_FPGA - IO_L23P_T3U_N8_45
@@ -315,7 +315,7 @@ set_property IOSTANDARD  POD12_DCI [get_ports {c0_ddr4_dq[41]}] ;# Bank  46 VCCO
 set_property PACKAGE_PIN AH34      [get_ports {c0_ddr4_dm_dbi_n[5]}] ;# Bank  46 VCCO - VCC1V2_FPGA - IO_L7P_T1L_N0_QBC_AD13P_46
 set_property IOSTANDARD  POD12_DCI [get_ports {c0_ddr4_dm_dbi_n[5]}] ;# Bank  46 VCCO - VCC1V2_FPGA - IO_L7P_T1L_N0_QBC_AD13P_46
 set_property PACKAGE_PIN AJ34      [get_ports {c0_ddr4_reset_n}] ;# Bank  46 VCCO - VCC1V2_FPGA - IO_L7N_T1L_N1_QBC_AD13N_46
-set_property IOSTANDARD  LVCOS12   [get_ports {c0_ddr4_reset_n}] ;# Bank  46 VCCO - VCC1V2_FPGA - IO_L7N_T1L_N1_QBC_AD13N_46
+set_property IOSTANDARD  LVCMOS12  [get_ports {c0_ddr4_reset_n}] ;# Bank  46 VCCO - VCC1V2_FPGA - IO_L7N_T1L_N1_QBC_AD13N_46
 
 set_property PACKAGE_PIN AJ31      [get_ports {c0_ddr4_dq[33]}] ;# Bank  46 VCCO - VCC1V2_FPGA - IO_L6P_T0U_N10_AD6P_46
 set_property IOSTANDARD  POD12_DCI [get_ports {c0_ddr4_dq[33]}] ;# Bank  46 VCCO - VCC1V2_FPGA - IO_L6P_T0U_N10_AD6P_46
