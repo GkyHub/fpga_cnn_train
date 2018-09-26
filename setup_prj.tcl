@@ -25,7 +25,7 @@ add_files -fileset sim_1 ./sim
 update_compile_order -fileset sim_1
 
 # add constraint files
-add_files -fileset constrs_1 ./const
+add_files -fileset constrs_1 ./xdc
 
 # add ip
 # source ./add_ip.tcl
