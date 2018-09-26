@@ -12,7 +12,7 @@ module test_top;
     
     initial begin
        sys_rst = 1'b0;
-       #200
+       #200;
        sys_rst = 1'b1;
        #400;
        sys_rst = 1'b0;
@@ -147,10 +147,13 @@ module test_top;
         .c0_ddr4_cke            (c0_ddr4_cke            ),
         .c0_ddr4_odt            (c0_ddr4_odt            ),
         .c0_ddr4_cs_n           (c0_ddr4_cs_n           ),
-        .c0_ddr4_ck_t           (c0_ddr4_ck_t_int       ),
-        .c0_ddr4_ck_c           (c0_ddr4_ck_c_int       ),
+        .c0_ddr4_ck_t           (c0_ddr4_ck_t           ),
+        .c0_ddr4_ck_c           (c0_ddr4_ck_c           ),
         .c0_ddr4_reset_n        (c0_ddr4_reset_n        ),
         .c0_ddr4_dm_dbi_n       (c0_ddr4_dm_dbi_n       ),
+        .c0_ddr4_dq             (c0_ddr4_dq             ),
+        .c0_ddr4_dqs_c          (c0_ddr4_dqs_c          ),
+        .c0_ddr4_dqs_t          (c0_ddr4_dqs_t          ),
 
         .c1_data_compare_error  (c1_data_compare_error  ),
         .c1_init_calib_complete (c1_init_calib_complete ),
@@ -164,52 +167,13 @@ module test_top;
         .c1_ddr4_cke            (c1_ddr4_cke            ),
         .c1_ddr4_odt            (c1_ddr4_odt            ),
         .c1_ddr4_cs_n           (c1_ddr4_cs_n           ),
-        .c1_ddr4_ck_t           (c1_ddr4_ck_t_int       ),
-        .c1_ddr4_ck_c           (c1_ddr4_ck_c_int       ),
+        .c1_ddr4_ck_t           (c1_ddr4_ck_t           ),
+        .c1_ddr4_ck_c           (c1_ddr4_ck_c           ),
         .c1_ddr4_reset_n        (c1_ddr4_reset_n        ),
         .c1_ddr4_dm_dbi_n       (c1_ddr4_dm_dbi_n       ),
         .c1_ddr4_dq             (c1_ddr4_dq             ),
         .c1_ddr4_dqs_c          (c1_ddr4_dqs_c          ),
-        .c1_ddr4_dqs_t          (c1_ddr4_dqs_t          ),
-
-        .ins_valid              (ins_valid              ),
-        .ins_ready              (ins_ready              ),
-        .ins                    (ins                    ),
-        .working                (working                )
-    );
-
-    initial begin
-        ins_valid   <= 1'b0;
-        ins         <= '0;
-        wait(sys_rst);
-        #500
-        @(posedge core_clk);
-        
-        SEND(INS_CONF(LT_F_CONV, 1'b1, 1'b1, 4'd7, 4'd7, 8'd31, 8'd15));
-        
-        SEND(INS_LOAD(RD_OP_D, 0, 0, {4'd0, 4'd3, 4'd7}, 32'h0000_0000));
-        
-        SEND(INS_LOAD(RD_OP_DW, 0, 19, 12'd180, 32'h1000_0000));
-        
-        SEND(INS_CALC(1'b0, 1'b1, 0, 4'b0000, 6, 19));
-        
-        SEND(INS_LOAD(RD_OP_DW, 1, 21, 12'd198, 32'h1001_0000));
-        
-        SEND(INS_CALC(1'b0, 1'b1, 1, 4'b0000, 6, 21));
-        
-        SEND(INS_SAVE(WR_OP_D, 0, {4'd0, 4'd0, 4'd2}, 2, 32'h0002_0000));
-        
-        SEND(INS_SAVE(WR_OP_D, 1, {4'd0, 4'd0, 4'd2}, 2, 32'h0002_0000));        
-    end
-    
-    task SEND(input [63:0] i);
-        ins         <= i;
-        ins_valid   <= 1'b1;
-        while (~ins_ready) begin
-            @(posedge core_clk);
-        end
-        ins_valid   <= 1'b0;
-        @(posedge core_clk);
-    endtask
+        .c1_ddr4_dqs_t          (c1_ddr4_dqs_t          )
+      );
   
 endmodule
