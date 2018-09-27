@@ -18,6 +18,24 @@ add_files -fileset sources_1 ./src
 add_files -fileset sources_1 ./imports
 # set_property top $SRC_TOP $VIVADO_PRJ
 update_compile_order -fileset sources_1
+# add ip files
+set IP_LIST [glob -type d ./ip/*]
+foreach IP_FOLDER $IP_LIST {
+    # ignore project folder
+    if {1 == [string match *managed_ip_project $IP_FOLDER]} {
+        continue
+    }
+    # ignore ip_user_files folder
+    if {1 == [string match *ip_user_files $IP_FOLDER]} {
+        continue
+    }
+    # add the xci files
+    set IP_NAME [string range $IP_FOLDER 5 end]
+    set IP_XCI  $IP_FOLDER
+    append IP_XCI "/" $IP_NAME ".xci"    
+    add_files -norecurse $IP_XCI
+}
+update_compile_order -fileset sources_1
 
 # add simulation files
 add_files -fileset sim_1 ./sim

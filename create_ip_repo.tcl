@@ -21,3 +21,5 @@ foreach IP_FOLDER $IP_LIST {
     append IP_XCI "/" $IP_NAME ".xci"    
     add_files -norecurse $IP_XCI
 }
+
+close_project

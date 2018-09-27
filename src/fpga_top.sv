@@ -295,7 +295,7 @@ module fpga_top #(
     axi_datamover_0 datamover_c0 (
         .m_axi_mm2s_aclk            (c0_ddr4_clk                ),  // input wire m_axi_mm2s_aclk
         .m_axi_mm2s_aresetn         (c0_datamover_rstn_r        ),  // input wire m_axi_mm2s_aresetn
-        .mm2s_err                   (mm2s_err                   ),  // output wire mm2s_err
+        .mm2s_err                   (/* not used */             ),  // output wire mm2s_err
         
         .m_axis_mm2s_cmdsts_aclk    (core_clk                   ),  // input wire m_axis_mm2s_cmdsts_aclk
         .m_axis_mm2s_cmdsts_aresetn (core_rst_r                 ),  // input wire m_axis_mm2s_cmdsts_aresetn
@@ -303,10 +303,10 @@ module fpga_top #(
         .s_axis_mm2s_cmd_tready     (s_axis_mm2s_cmd_tready_c0  ),  // output wire s_axis_mm2s_cmd_tready
         .s_axis_mm2s_cmd_tdata      (s_axis_mm2s_cmd_tdata_c0   ),  // input wire [71 : 0] s_axis_mm2s_cmd_tdata
         .m_axis_mm2s_sts_tvalid     (m_axis_mm2s_sts_tvalid_c0  ),  // output wire m_axis_mm2s_sts_tvalid
-        .m_axis_mm2s_sts_tready     (m_axis_mm2s_sts_tready_c0  ),  // input wire m_axis_mm2s_sts_tready
+        .m_axis_mm2s_sts_tready     (1'b1                       ),  // input wire m_axis_mm2s_sts_tready
         .m_axis_mm2s_sts_tdata      (/* not used */             ),  // output wire [7 : 0] m_axis_mm2s_sts_tdata
-        .m_axis_mm2s_sts_tkeep      (m_axis_mm2s_sts_tkeep_c0   ),  // output wire [0 : 0] m_axis_mm2s_sts_tkeep
-        .m_axis_mm2s_sts_tlast      (m_axis_mm2s_sts_tlast_c0   ),  // output wire m_axis_mm2s_sts_tlast
+        .m_axis_mm2s_sts_tkeep      (/* not used */             ),  // output wire [0 : 0] m_axis_mm2s_sts_tkeep
+        .m_axis_mm2s_sts_tlast      (/* not used */             ),  // output wire m_axis_mm2s_sts_tlast
         .m_axi_mm2s_arid            (c0_ddr4_s_axi_arid         ),  // output wire [3 : 0] m_axi_mm2s_arid
         .m_axi_mm2s_araddr          (c0_ddr4_s_axi_araddr       ),  // output wire [31 : 0] m_axi_mm2s_araddr
         .m_axi_mm2s_arlen           (c0_ddr4_s_axi_arlen        ),  // output wire [7 : 0] m_axi_mm2s_arlen
@@ -330,7 +330,7 @@ module fpga_top #(
 
         .m_axi_s2mm_aclk            (c0_ddr4_clk                ),  // input wire m_axi_s2mm_aclk
         .m_axi_s2mm_aresetn         (c0_datamover_rstn_r        ),  // input wire m_axi_s2mm_aresetn
-        .s2mm_err                   (s2mm_err                   ),  // output wire s2mm_err
+        .s2mm_err                   (/* not used */             ),  // output wire s2mm_err
 
         .m_axis_s2mm_cmdsts_awclk   (core_clk                   ),  // input wire m_axis_s2mm_cmdsts_awclk
         .m_axis_s2mm_cmdsts_aresetn (core_rst_r                 ),  // input wire m_axis_s2mm_cmdsts_aresetn
@@ -338,10 +338,10 @@ module fpga_top #(
         .s_axis_s2mm_cmd_tready     (s_axis_s2mm_cmd_tready_c0  ),  // output wire s_axis_s2mm_cmd_tready
         .s_axis_s2mm_cmd_tdata      (s_axis_s2mm_cmd_tdata_c0   ),  // input wire [71 : 0] s_axis_s2mm_cmd_tdata
         .m_axis_s2mm_sts_tvalid     (m_axis_s2mm_sts_tvalid_c0  ),  // output wire m_axis_s2mm_sts_tvalid
-        .m_axis_s2mm_sts_tready     (m_axis_s2mm_sts_tready_c0  ),  // input wire m_axis_s2mm_sts_tready
+        .m_axis_s2mm_sts_tready     (1'b1                       ),  // input wire m_axis_s2mm_sts_tready
         .m_axis_s2mm_sts_tdata      (/* not used */             ),  // output wire [7 : 0] m_axis_s2mm_sts_tdata
-        .m_axis_s2mm_sts_tkeep      (m_axis_s2mm_sts_tkeep_c0   ),  // output wire [0 : 0] m_axis_s2mm_sts_tkeep
-        .m_axis_s2mm_sts_tlast      (m_axis_s2mm_sts_tlast_c0   ),  // output wire m_axis_s2mm_sts_tlast
+        .m_axis_s2mm_sts_tkeep      (/* not used */             ),  // output wire [0 : 0] m_axis_s2mm_sts_tkeep
+        .m_axis_s2mm_sts_tlast      (/* not used */             ),  // output wire m_axis_s2mm_sts_tlast
         .m_axi_s2mm_awid            (c0_ddr4_s_axi_awid         ),  // output wire [7 : 0] m_axi_s2mm_awid
         .m_axi_s2mm_awaddr          (c0_ddr4_s_axi_awaddr       ),  // output wire [31 : 0] m_axi_s2mm_awaddr
         .m_axi_s2mm_awlen           (c0_ddr4_s_axi_awlen        ),  // output wire [7 : 0] m_axi_s2mm_awlen
@@ -573,7 +573,7 @@ module fpga_top #(
     axi_datamover_0 datamover_c1 (
         .m_axi_mm2s_aclk            (c1_ddr4_clk                ),
         .m_axi_mm2s_aresetn         (c1_datamover_rstn_r        ),
-        .mm2s_err                   (mm2s_err                   ),
+        .mm2s_err                   (/* not used */             ),
 
         .m_axis_mm2s_cmdsts_aclk    (core_clk                   ),  // input wire m_axis_mm2s_cmdsts_aclk
         .m_axis_mm2s_cmdsts_aresetn (core_rst_r                 ),  // input wire m_axis_mm2s_cmdsts_aresetn
@@ -581,10 +581,10 @@ module fpga_top #(
         .s_axis_mm2s_cmd_tready     (s_axis_mm2s_cmd_tready_c1  ),  // output wire s_axis_mm2s_cmd_tready
         .s_axis_mm2s_cmd_tdata      (s_axis_mm2s_cmd_tdata_c1   ),  // input wire [71 : 0] s_axis_mm2s_cmd_tdata
         .m_axis_mm2s_sts_tvalid     (m_axis_mm2s_sts_tvalid_c1  ),  // output wire m_axis_mm2s_sts_tvalid
-        .m_axis_mm2s_sts_tready     (m_axis_mm2s_sts_tready_c1  ),  // input wire m_axis_mm2s_sts_tready
+        .m_axis_mm2s_sts_tready     (1'b1                       ),  // input wire m_axis_mm2s_sts_tready
         .m_axis_mm2s_sts_tdata      (/* not used */             ),  // output wire [7 : 0] m_axis_mm2s_sts_tdata
-        .m_axis_mm2s_sts_tkeep      (m_axis_mm2s_sts_tkeep_c1   ),  // output wire [0 : 0] m_axis_mm2s_sts_tkeep
-        .m_axis_mm2s_sts_tlast      (m_axis_mm2s_sts_tlast_c1   ),  // output wire m_axis_mm2s_sts_tlast
+        .m_axis_mm2s_sts_tkeep      (/* not used */             ),  // output wire [0 : 0] m_axis_mm2s_sts_tkeep
+        .m_axis_mm2s_sts_tlast      (/* not used */             ),  // output wire m_axis_mm2s_sts_tlast
         .m_axi_mm2s_arid            (c1_ddr4_s_axi_arid         ),  // output wire [3 : 0] m_axi_mm2s_arid
         .m_axi_mm2s_araddr          (c1_ddr4_s_axi_araddr       ),  // output wire [31 : 0] m_axi_mm2s_araddr
         .m_axi_mm2s_arlen           (c1_ddr4_s_axi_arlen        ),  // output wire [7 : 0] m_axi_mm2s_arlen
@@ -608,7 +608,7 @@ module fpga_top #(
 
         .m_axi_s2mm_aclk            (c1_ddr4_clk                ),  // input wire m_axi_s2mm_aclk
         .m_axi_s2mm_aresetn         (c1_datamover_rstn_r        ),  // input wire m_axi_s2mm_aresetn
-        .s2mm_err                   (s2mm_err                   ),  // output wire s2mm_err
+        .s2mm_err                   (/* not used */             ),  // output wire s2mm_err
 
         .m_axis_s2mm_cmdsts_awclk   (core_clk                   ),  // input wire m_axis_s2mm_cmdsts_awclk
         .m_axis_s2mm_cmdsts_aresetn (core_rst_r                 ),  // input wire m_axis_s2mm_cmdsts_aresetn
@@ -616,10 +616,10 @@ module fpga_top #(
         .s_axis_s2mm_cmd_tready     (s_axis_s2mm_cmd_tready_c1  ),  // output wire s_axis_s2mm_cmd_tready
         .s_axis_s2mm_cmd_tdata      (s_axis_s2mm_cmd_tdata_c1   ),  // input wire [71 : 0] s_axis_s2mm_cmd_tdata
         .m_axis_s2mm_sts_tvalid     (m_axis_s2mm_sts_tvalid_c1  ),  // output wire m_axis_s2mm_sts_tvalid
-        .m_axis_s2mm_sts_tready     (m_axis_s2mm_sts_tready_c1  ),  // input wire m_axis_s2mm_sts_tready
+        .m_axis_s2mm_sts_tready     (1'b1                       ),  // input wire m_axis_s2mm_sts_tready
         .m_axis_s2mm_sts_tdata      (/* not used */             ),  // output wire [7 : 0] m_axis_s2mm_sts_tdata
-        .m_axis_s2mm_sts_tkeep      (m_axis_s2mm_sts_tkeep_c1   ),  // output wire [0 : 0] m_axis_s2mm_sts_tkeep
-        .m_axis_s2mm_sts_tlast      (m_axis_s2mm_sts_tlast_c1   ),  // output wire m_axis_s2mm_sts_tlast
+        .m_axis_s2mm_sts_tkeep      (/* not used */             ),  // output wire [0 : 0] m_axis_s2mm_sts_tkeep
+        .m_axis_s2mm_sts_tlast      (/* not used */             ),  // output wire m_axis_s2mm_sts_tlast
         .m_axi_s2mm_awid            (c1_ddr4_s_axi_awid         ),  // output wire [7 : 0] m_axi_s2mm_awid
         .m_axi_s2mm_awaddr          (c1_ddr4_s_axi_awaddr       ),  // output wire [31 : 0] m_axi_s2mm_awaddr
         .m_axi_s2mm_awlen           (c1_ddr4_s_axi_awlen        ),  // output wire [7 : 0] m_axi_s2mm_awlen
@@ -705,15 +705,9 @@ module fpga_top #(
         .s_axis_tdata       (ddr1_out_data          ),
         .m_axis_aresetn     (c0_datamover_rstn_r    ),
         .m_axis_aclk        (c0_ddr4_clk            ),
-<<<<<<< HEAD:src/fpga_top.sv
         .m_axis_tvalid      (s_axis_s2mm_tvalid_c0  ),
         .m_axis_tready      (s_axis_s2mm_tready_c0  ),
         .m_axis_tdata       (s_axis_s2mm_tdata_c0   ),
-=======
-        .m_axis_tvalid      (m_axis_s2mm_tvalid_c0  ),
-        .m_axis_tready      (m_axis_s2mm_tready_c0  ),
-        .m_axis_tdata       (m_axis_s2mm_tdata_c0   ),
->>>>>>> 5eac04780a708a5206f8d26dbd68fe60c333c88d:sim/fpga_top.sv
         .axis_data_count    (/*not used*/           ),
         .axis_wr_data_count (/*not used*/           ),
         .axis_rd_data_count (/*not used*/           ) 
@@ -727,15 +721,9 @@ module fpga_top #(
         .s_axis_tdata       (ddr2_out_data          ),
         .m_axis_aresetn     (c1_datamover_rstn_r    ),
         .m_axis_aclk        (c1_ddr4_clk            ),
-<<<<<<< HEAD:src/fpga_top.sv
         .m_axis_tvalid      (s_axis_s2mm_tvalid_c1  ),
         .m_axis_tready      (s_axis_s2mm_tready_c1  ),
         .m_axis_tdata       (s_axis_s2mm_tdata_c1   ),
-=======
-        .m_axis_tvalid      (m_axis_s2mm_tvalid_c1  ),
-        .m_axis_tready      (m_axis_s2mm_tready_c1  ),
-        .m_axis_tdata       (m_axis_s2mm_tdata_c1   ),
->>>>>>> 5eac04780a708a5206f8d26dbd68fe60c333c88d:sim/fpga_top.sv
         .axis_data_count    (/*not used*/           ),
         .axis_wr_data_count (/*not used*/           ),
         .axis_rd_data_count (/*not used*/           ) 

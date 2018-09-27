@@ -1,7 +1,7 @@
 import  GLOBAL_PARAM::*;
 import  INS_CONST::*;
 
-(* dont_touch = "true" *)
+//(* dont_touch = "true" *)
 module fpga_cnn_train_top#(
     parameter   PE_NUM  = 32
     )(
