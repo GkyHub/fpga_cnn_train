@@ -15,7 +15,6 @@ set_property board_part $BOARD $VIVADO_PRJ
 
 # add source files
 add_files -fileset sources_1 ./src
-add_files -fileset sources_1 ./imports
 # set_property top $SRC_TOP $VIVADO_PRJ
 update_compile_order -fileset sources_1
 # add ip files
@@ -43,7 +42,7 @@ add_files -fileset sim_1 ./sim
 update_compile_order -fileset sim_1
 
 # add constraint files
-add_files -fileset constrs_1 ./xdc
+# add_files -fileset constrs_1 ./xdc
 
 # add ip
 # source ./add_ip.tcl
